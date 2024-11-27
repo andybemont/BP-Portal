@@ -3,29 +3,9 @@
 import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
-import { signIn } from "@/auth";
-import { AuthError } from "next-auth";
-import { Client, ScheduledEvent } from "./definitions";
+import { ScheduledEvent } from "./definitions";
 import { insertScheduledEvent, updateScheduledEvent } from "./data";
-
-type IdResult = {
-  id: string;
-};
-
-const ClientFormSchema = z.object({
-  id: z.string(),
-  userId: z.string({
-    invalid_type_error: "Please select a user.",
-  }),
-  primarypersonname: z
-    .string()
-    .min(1, "Name is required")
-    .max(50, "Max length of name is 50"),
-  primarypersonemail: z.string().max(50, "Max length of email address is 50"),
-  primarypersonphone: z.string().max(50, "Max length of phone number is 50"),
-  notes: z.string(),
-  date: z.string(),
-});
+import { nullIfEmpty, uuidv4 } from "./helpers";
 
 const EventFormSchema = z.object({
   id: z.string(),
@@ -49,19 +29,7 @@ const EventFormSchema = z.object({
   pixieseturl: z.string().nullish(),
 });
 
-const ClientForm = ClientFormSchema.omit({ date: true, id: true });
 const EventForm = EventFormSchema.omit({ id: true });
-
-export type ClientFormState = {
-  errors?: {
-    userId?: string[];
-    primarypersonname?: string[];
-    primarypersonemail?: string[];
-    primarypersonphone?: string[];
-    notes?: string[];
-  };
-  message?: string | null;
-};
 
 export type EventFormState = {
   errors?: {
@@ -87,13 +55,6 @@ export type EventFormState = {
   message?: string | null;
 };
 
-const nullIfEmpty = (value: string | FormDataEntryValue | null) => {
-  if (!value || value.toString().length === 0) {
-    return null;
-  }
-  return value;
-};
-
 const extractEventFormData = (formData: FormData) => {
   return EventForm.safeParse({
     type: formData.get("type"),
@@ -115,15 +76,6 @@ const extractEventFormData = (formData: FormData) => {
     location4: nullIfEmpty(formData.get("location4")),
     pixieseturl: nullIfEmpty(formData.get("pixieseturl")),
   });
-};
-
-const uuidv4 = () => {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
-    (
-      +c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))
-    ).toString(16)
-  );
 };
 
 const validateEvent = (id: string | null | undefined, formData: FormData) => {
@@ -217,92 +169,6 @@ export async function updateEvent(
   redirect(`/home/clients/${validationResult.event?.client_id}/view`);
 }
 
-export async function createClient(
-  prevState: ClientFormState,
-  formData: FormData
-) {
-  const validatedFields = ClientForm.safeParse({
-    userId: formData.get("userId"),
-    primarypersonname: formData.get("primarypersonname"),
-    primarypersonemail: formData.get("primarypersonemail"),
-    primarypersonphone: formData.get("primarypersonphone"),
-    notes: formData.get("notes"),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to create client.",
-    };
-  }
-
-  const {
-    userId,
-    primarypersonname,
-    primarypersonemail,
-    primarypersonphone,
-    notes,
-  } = validatedFields.data;
-
-  var id = "";
-  try {
-    const idResult = await sql<IdResult>`
-      INSERT INTO clients(user_id, primarypersonname, primarypersonemail, primarypersonphone, notes)
-      VALUES (${userId}, ${primarypersonname}, ${primarypersonemail}, ${primarypersonphone}, ${notes})
-      RETURNING ID
-    `;
-    id = idResult.rows[0].id;
-  } catch (error) {
-    console.error(error);
-    return { message: "Database Error: Failed to create client." };
-  }
-  redirect(`/home/clients/${id}/view`);
-}
-
-export async function updateClient(
-  id: string,
-  prevState: ClientFormState,
-  formData: FormData
-) {
-  const validatedFields = ClientForm.safeParse({
-    userId: formData.get("userId"),
-    primarypersonname: formData.get("primarypersonname"),
-    primarypersonemail: formData.get("primarypersonemail"),
-    primarypersonphone: formData.get("primarypersonphone"),
-    notes: formData.get("notes"),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Client.",
-    };
-  }
-
-  const {
-    userId,
-    primarypersonname,
-    primarypersonemail,
-    primarypersonphone,
-    notes,
-  } = validatedFields.data;
-
-  try {
-    await sql`
-      UPDATE clients
-      SET user_id = ${userId},
-          primarypersonname = ${primarypersonname},
-          primarypersonemail = ${primarypersonemail},
-          primarypersonphone = ${primarypersonphone},
-          notes = ${notes}
-      WHERE id = ${id}
-    `;
-  } catch (error) {
-    return { message: "Database Error: Failed to Update Client." };
-  }
-  redirect(`/home/clients/${id}/view`);
-}
-
 export async function deleteEvent(event: ScheduledEvent) {
   try {
     await sql`
@@ -312,39 +178,4 @@ export async function deleteEvent(event: ScheduledEvent) {
     return { message: "Database Error: Failed to delete event." };
   }
   redirect(`/home/clients/${event.client_id}/view`);
-}
-
-export async function deleteClient(client: Client) {
-  console.error("whaT??");
-  try {
-    await sql`
-      DELETE FROM scheduledevents WHERE client_id = ${client.id}
-    `;
-    await sql`
-      DELETE FROM clients WHERE id = ${client.id}
-    `;
-  } catch (error) {
-    console.error(error);
-    return { message: "Database Error: Failed to delete client." };
-  }
-  redirect(`/home/clients/`);
-}
-
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData
-) {
-  try {
-    await signIn("credentials", formData);
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
-    }
-    throw error;
-  }
 }

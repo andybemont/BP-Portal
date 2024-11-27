@@ -2,7 +2,11 @@
 
 import { ScheduledEvent, User } from "@/app/lib/definitions";
 import { useActionState, useState } from "react";
-import { createEvent, EventFormState, updateEvent } from "@/app/lib/actions";
+import {
+  createEvent,
+  EventFormState,
+  updateEvent,
+} from "@/app/lib/event-actions";
 import UserPicker from "../form/controls/user-picker";
 import TextField from "../form/controls/text-field";
 import NotesField from "../form/controls/notes-field";
@@ -31,7 +35,7 @@ export default function EventAddEditModal({
   return (
     show && (
       <form action={formAction}>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-70 overflow-y-auto h-screen w-screen flex items-center justify-center">
+        <div className="z-10 fixed inset-0 bg-gray-600 bg-opacity-70 overflow-y-auto h-screen w-screen flex items-center justify-center">
           <div className="m-1 border w-full shadow-lg rounded-md bg-white max-w-[600px]">
             <div className="text-center">
               <h3 className="text-2xl font-bold text-gray-900">
@@ -87,6 +91,7 @@ export default function EventAddEditModal({
                       errors={state?.errors?.user_id}
                       caption="Primary person"
                       defaultValue={eventToEdit?.user_id}
+                      showUnassigned
                     />
                   </div>
 
@@ -99,6 +104,7 @@ export default function EventAddEditModal({
                           errors={state?.errors?.seconduser_id}
                           caption="Second photographer"
                           defaultValue={eventToEdit?.seconduser_id}
+                          showUnassigned
                         />
                       </div>
                       <div className="mb-1">
@@ -107,6 +113,7 @@ export default function EventAddEditModal({
                           errors={state?.errors?.thirduser_id}
                           caption="Third photographer"
                           defaultValue={eventToEdit?.thirduser_id}
+                          showUnassigned
                         />
                       </div>
                       <div className="mb-1">

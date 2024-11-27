@@ -1,31 +1,31 @@
 "use client";
 
-import { Client, User } from "@/app/lib/definitions";
+import { EmailTemplate, User } from "@/app/lib/definitions";
 import { useActionState } from "react";
 import {
-  ClientFormState,
-  createClient,
-  updateClient,
-} from "@/app/lib/client-actions";
-import UserPicker from "../form/controls/user-picker";
-import TextField from "../form/controls/text-field";
-import NotesField from "../form/controls/notes-field";
+  createTemplate,
+  TemplateFormState,
+  updateTemplate,
+} from "@/app/lib/template-actions";
+import UserPicker from "../clients/form/controls/user-picker";
+import TextField from "../clients/form/controls/text-field";
+import NotesField from "../clients/form/controls/notes-field";
 
-export default function ClientAddEditModal({
-  clientToEdit,
-  users,
+export default function TemplateAddEditModal({
+  templateToEdit,
+  allUsers,
   show,
   handleClose,
 }: {
-  clientToEdit?: Client;
-  users: User[];
+  templateToEdit?: EmailTemplate;
+  allUsers: User[];
   show: boolean;
   handleClose: () => void;
 }) {
-  const initialState: ClientFormState = { message: null, errors: {} };
-  var [state, formAction] = clientToEdit
-    ? useActionState(updateClient.bind(null, clientToEdit.id), initialState)
-    : useActionState(createClient, initialState);
+  const initialState: TemplateFormState = { message: null, errors: {} };
+  var [state, formAction] = templateToEdit
+    ? useActionState(updateTemplate.bind(null, templateToEdit.id), initialState)
+    : useActionState(createTemplate, initialState);
 
   return (
     show && (
@@ -34,7 +34,7 @@ export default function ClientAddEditModal({
           <div className="m-1 border w-full shadow-lg rounded-md bg-white max-w-[600px]">
             <div className="text-center">
               <h3 className="text-2xl font-bold text-gray-900">
-                {clientToEdit ? `Edit Client` : "Add Client"}
+                {templateToEdit ? `Edit Template` : "Add Template"}
               </h3>
               <div className="m-0 p-0">
                 <div
@@ -43,49 +43,29 @@ export default function ClientAddEditModal({
                   {/* User */}
                   <div className="mb-1">
                     <UserPicker
-                      users={users}
+                      users={allUsers}
                       errors={state?.errors?.user_id}
-                      caption="Main contact"
-                      defaultValue={clientToEdit?.user_id}
-                      showUnassigned
+                      caption="User"
+                      defaultValue={templateToEdit?.user_id}
+                      showUnassigned={false}
                     />
                   </div>
 
-                  {/* Contact */}
-                  <div className="mb-1 w-full">
-                    <div className="grow">
-                      <TextField
-                        caption="Name"
-                        field="primarypersonname"
-                        type="text"
-                        defaultValue={clientToEdit?.primarypersonname}
-                        errors={state.errors?.primarypersonname}
-                      />
-                    </div>
-                    <div className="grow">
-                      <TextField
-                        caption="Email"
-                        field="primarypersonemail"
-                        type="email"
-                        defaultValue={clientToEdit?.primarypersonemail}
-                        errors={state.errors?.primarypersonemail}
-                      />
-                    </div>
-                    <div className="grow">
-                      <TextField
-                        caption="Phone"
-                        field="primarypersonphone"
-                        type="text"
-                        defaultValue={clientToEdit?.primarypersonphone}
-                        errors={state.errors?.primarypersonphone}
-                      />
-                    </div>
+                  {/* Title */}
+                  <div className="mb-1">
+                    <TextField
+                      caption="Title"
+                      field="title"
+                      type="text"
+                      defaultValue={templateToEdit?.title}
+                      errors={state.errors?.title}
+                    />
                   </div>
 
-                  {/* Notes */}
+                  {/* Text */}
                   <div className="mb-1">
                     <NotesField
-                      defaultValue={clientToEdit?.notes}
+                      defaultValue={templateToEdit?.text}
                       errors={state.errors?.notes}
                     />
                   </div>
@@ -100,6 +80,7 @@ export default function ClientAddEditModal({
                 </div>
               </div>
               <div className="flex justify-center my-2">
+                {/* Using useRouter to dismiss modal*/}
                 <button
                   onClick={handleClose}
                   className="px-4 mx-1 py-2 bg-gray-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
