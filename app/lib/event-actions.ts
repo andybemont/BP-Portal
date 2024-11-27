@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { ScheduledEvent } from "./definitions";
 import { insertScheduledEvent, updateScheduledEvent } from "./data";
 import { nullIfEmpty, uuidv4 } from "./helpers";
+import { revalidatePath } from "next/cache";
 
 const EventFormSchema = z.object({
   id: z.string(),
@@ -55,31 +56,34 @@ export type EventFormState = {
   message?: string | null;
 };
 
-const extractEventFormData = (formData: FormData) => {
+const extractEventFormData = async (formData: FormData) => {
   return EventForm.safeParse({
     type: formData.get("type"),
-    client_id: nullIfEmpty(formData.get("client_id")),
-    user_id: nullIfEmpty(formData.get("user_id")),
-    seconduser_id: nullIfEmpty(formData.get("seconduser_id")),
-    thirduser_id: nullIfEmpty(formData.get("thirduser_id")),
-    date: nullIfEmpty(formData.get("date")),
-    title: nullIfEmpty(formData.get("title")),
-    notes: nullIfEmpty(formData.get("notes")),
-    cost: nullIfEmpty(formData.get("cost")),
-    duration: nullIfEmpty(formData.get("duration")),
-    engagementsession: nullIfEmpty(formData.get("engagementsession")),
-    priorityediting: nullIfEmpty(formData.get("priorityediting")),
-    numphotographers: nullIfEmpty(formData.get("numphotographers")),
-    location: nullIfEmpty(formData.get("location")),
-    location2: nullIfEmpty(formData.get("location2")),
-    location3: nullIfEmpty(formData.get("location3")),
-    location4: nullIfEmpty(formData.get("location4")),
-    pixieseturl: nullIfEmpty(formData.get("pixieseturl")),
+    client_id: await nullIfEmpty(formData.get("client_id")),
+    user_id: await nullIfEmpty(formData.get("user_id")),
+    seconduser_id: await nullIfEmpty(formData.get("seconduser_id")),
+    thirduser_id: await nullIfEmpty(formData.get("thirduser_id")),
+    date: await nullIfEmpty(formData.get("date")),
+    title: await nullIfEmpty(formData.get("title")),
+    notes: await nullIfEmpty(formData.get("notes")),
+    cost: await nullIfEmpty(formData.get("cost")),
+    duration: await nullIfEmpty(formData.get("duration")),
+    engagementsession: await nullIfEmpty(formData.get("engagementsession")),
+    priorityediting: await nullIfEmpty(formData.get("priorityediting")),
+    numphotographers: await nullIfEmpty(formData.get("numphotographers")),
+    location: await nullIfEmpty(formData.get("location")),
+    location2: await nullIfEmpty(formData.get("location2")),
+    location3: await nullIfEmpty(formData.get("location3")),
+    location4: await nullIfEmpty(formData.get("location4")),
+    pixieseturl: await nullIfEmpty(formData.get("pixieseturl")),
   });
 };
 
-const validateEvent = (id: string | null | undefined, formData: FormData) => {
-  const validatedFields = extractEventFormData(formData);
+const validateEvent = async (
+  id: string | null | undefined,
+  formData: FormData
+) => {
+  const validatedFields = await extractEventFormData(formData);
 
   if (!validatedFields.success) {
     return {
@@ -120,7 +124,7 @@ export async function createEvent(
   prevState: EventFormState,
   formData: FormData
 ) {
-  const validationResult = validateEvent(await uuidv4(), formData);
+  const validationResult = await validateEvent(await uuidv4(), formData);
 
   if (validationResult.errors) {
     return {
@@ -137,6 +141,7 @@ export async function createEvent(
     console.error(error);
     return { message: "Database Error: Failed to create event." };
   }
+
   redirect(`/home/clients/${validationResult.event?.client_id}/view`);
 }
 
@@ -145,7 +150,7 @@ export async function updateEvent(
   prevState: EventFormState,
   formData: FormData
 ) {
-  const validationResult = validateEvent(id, formData);
+  const validationResult = await validateEvent(id, formData);
 
   if (validationResult.errors) {
     return {

@@ -7,9 +7,8 @@ import EventAddEditModal from "./event-add-edit-modal";
 import EventDeleteModal from "./event-delete-modal";
 
 const colors = {
-  complete: "text-slate-600 bg-slate-300",
-  urgent: "bg-red-200/50",
-  future: "bg-blue-200/50",
+  complete: "text-slate-600/70 bg-neutral-950/10",
+  active: "bg-white/50",
 };
 export default function EventCard({
   scheduledEvent,
@@ -26,15 +25,9 @@ export default function EventCard({
 
   var bgColor = "";
   if (scheduledEvent.type === "Meeting") {
-    bgColor = inThePast ? colors.complete : colors.urgent;
+    bgColor = inThePast ? colors.complete : colors.active;
   } else {
-    if (delivered) {
-      bgColor = colors.complete;
-    } else if (inThePast) {
-      bgColor = colors.urgent;
-    } else {
-      bgColor = colors.future;
-    }
+    bgColor = delivered ? colors.complete : colors.active;
   }
 
   return (
@@ -51,10 +44,7 @@ export default function EventCard({
         client_id={scheduledEvent.client_id}
         eventToEdit={scheduledEvent}
       />
-      <div
-        key={scheduledEvent.id}
-        className={`rounded-md ${bgColor} p-1 my-1 placeholder:text-gray-500 text-black`}
-      >
+      <div key={scheduledEvent.id} className={`rounded-md ${bgColor} p-1 my-1`}>
         <div className="block text-md font-medium">
           <div className="flex flex-row">
             <p className="font-bold">
@@ -67,7 +57,7 @@ export default function EventCard({
               })`}
             </p>
             <PencilIcon
-              className="text-blue-600 h-5 pl-2 cursor-pointer"
+              className="h-5 pl-2 cursor-pointer"
               onClick={() => setShowEditForm(true)}
             />
             <TrashIcon
