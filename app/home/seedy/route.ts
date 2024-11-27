@@ -1,12 +1,19 @@
 import bcrypt from "bcrypt";
+import {
+  clients,
+  emailTemplates,
+  scheduledEvents,
+  users,
+} from "../../lib/placeholder-data";
 import { db } from "@vercel/postgres";
-import { clients, scheduledEvents, users } from "../../lib/placeholder-data";
+import { insertScheduledEvent } from "@/app/lib/data";
 const client = await db.connect();
 
 async function prep() {
   await client.sql`DROP TABLE IF EXISTS scheduledevents`;
   await client.sql`DROP TABLE IF EXISTS clients`;
   await client.sql`DROP TABLE IF EXISTS users`;
+  await client.sql`DROP TABLE IF EXISTS emailtemplates`;
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 }
 
@@ -25,6 +32,27 @@ async function seedUsers() {
       return client.sql`
             INSERT INTO users (id, name, email, password)
             VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+    })
+  );
+  return inserted;
+}
+
+async function seedEmailTemplates() {
+  await client.sql`
+     CREATE TABLE emailtemplates (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        user_id UUID NOT NULL,
+        title VARCHAR(100) NOT NULL,
+        text VARCHAR(5000) NOT NULL
+     );
+   `;
+  const inserted = await Promise.all(
+    emailTemplates.map(async (e) => {
+      return client.sql`
+            INSERT INTO emailtemplates (id, user_id, title, text)
+            VALUES (${e.id}, ${e.user_id}, ${e.title}, ${e.text})
             ON CONFLICT (id) DO NOTHING;
           `;
     })
@@ -81,7 +109,6 @@ async function seedScheduledEvents() {
       seconduser_id UUID NULL,
       thirduser_id UUID NULL,
       date DATE NULL,
-      time VARCHAR(50) NULL,
       title VARCHAR(100) NULL,
       notes VARCHAR(5000) NULL,
       cost INTEGER NULL,
@@ -98,97 +125,7 @@ async function seedScheduledEvents() {
    `;
   const inserted = await Promise.all(
     scheduledEvents.map(async (scheduledEvent) => {
-      console.error(`   INSERT INTO scheduledevents (
-    id,
-    type,
-    client_id,
-    user_id,
-    seconduser_id,
-    thirduser_id,
-    date,
-    time,
-    title,
-    notes,
-    cost,
-    duration,
-    engagementsession,
-    priorityediting,
-    numphotographers,
-    location,
-    location2,
-    location3,
-    location4,
-    pixieseturl
-   ) VALUES (
-    ${scheduledEvent.id},
-    ${scheduledEvent.type},
-    ${scheduledEvent.client_id},
-    ${scheduledEvent.user_id},
-    ${scheduledEvent.seconduser_id},
-    ${scheduledEvent.thirduser_id},
-    ${scheduledEvent.date?.toLocaleDateString()},
-    ${scheduledEvent.time?.toLocaleTimeString()},
-    ${scheduledEvent.title},
-    ${scheduledEvent.notes},
-    ${scheduledEvent.cost},
-    ${scheduledEvent.duration},
-    ${scheduledEvent.engagementsession},
-    ${scheduledEvent.priorityediting},
-    ${scheduledEvent.numphotographers},
-    ${scheduledEvent.location},
-    ${scheduledEvent.location2},
-    ${scheduledEvent.location3},
-    ${scheduledEvent.location4},
-    ${scheduledEvent.pixiesetUrl}
-   )
-   ON CONFLICT (id) DO NOTHING;`);
-
-      return client.sql`
-         INSERT INTO scheduledevents (
-          id,
-          type,
-          client_id,
-          user_id,
-          seconduser_id,
-          thirduser_id,
-          date,
-          time,
-          title,
-          notes,
-          cost,
-          duration,
-          engagementsession,
-          priorityediting,
-          numphotographers,
-          location,
-          location2,
-          location3,
-          location4,
-          pixieseturl
-         ) VALUES (
-    ${scheduledEvent.id},
-    ${scheduledEvent.type},
-    ${scheduledEvent.client_id},
-    ${scheduledEvent.user_id},
-    ${scheduledEvent.seconduser_id},
-    ${scheduledEvent.thirduser_id},
-    ${scheduledEvent.date?.toLocaleDateString()},
-    ${scheduledEvent.time?.toLocaleTimeString()},
-    ${scheduledEvent.title},
-    ${scheduledEvent.notes},
-    ${scheduledEvent.cost},
-    ${scheduledEvent.duration},
-    ${scheduledEvent.engagementsession},
-    ${scheduledEvent.priorityediting},
-    ${scheduledEvent.numphotographers},
-    ${scheduledEvent.location},
-    ${scheduledEvent.location2},
-    ${scheduledEvent.location3},
-    ${scheduledEvent.location4},
-    ${scheduledEvent.pixiesetUrl}
-         )
-         ON CONFLICT (id) DO NOTHING;
-       `;
+      insertScheduledEvent(scheduledEvent);
     })
   );
   return inserted;
@@ -201,6 +138,7 @@ export async function GET() {
     await seedUsers();
     await seedClients();
     await seedScheduledEvents();
+    await seedEmailTemplates();
     await client.sql`COMMIT`;
 
     return Response.json({ message: "Database seeded successfully" });

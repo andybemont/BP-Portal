@@ -1,6 +1,10 @@
 "use client";
 
-import { UserGroupIcon, HomeIcon } from "@heroicons/react/24/outline";
+import {
+  UserGroupIcon,
+  HomeIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -10,6 +14,11 @@ import clsx from "clsx";
 const links = [
   { name: "Home", href: "/home", icon: HomeIcon },
   { name: "Clients", href: "/home/clients", icon: UserGroupIcon },
+  {
+    name: "Email Templates",
+    href: "/home/email-templates",
+    icon: EnvelopeIcon,
+  },
 ];
 
 export default function NavLinks() {

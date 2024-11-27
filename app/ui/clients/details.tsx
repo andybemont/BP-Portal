@@ -2,16 +2,8 @@
 
 import { ClientDetails, User } from "@/app/lib/definitions";
 import { useState } from "react";
-import ClientEditForm from "./form/edit-form";
-import { PencilIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { Button } from "../button";
-import LabelBox from "./form/label-box";
-import ValidationErrorBox from "./form/validation-error-box";
 import ClientDetailCard from "./detailCards/client-detail-card";
-import { scheduledEvents } from "@/app/lib/placeholder-data";
-import WeddingCard from "./detailCards/wedding-card";
-import ShootCard from "./detailCards/shoot-card";
-import MeetingCard from "./detailCards/meeting-card";
+import EventCard from "./detailCards/event-card";
 
 export default function ClientDetailForm({
   client,
@@ -20,28 +12,33 @@ export default function ClientDetailForm({
   client: ClientDetails;
   users: User[];
 }) {
-  const [editMode, setEditMode] = useState(false);
   const user = users.find((u) => u.id === client.user_id);
-  if (editMode) {
-    return <ClientEditForm client={client} users={users} />;
-  } else {
-    return (
-      <div className="">
-        <ClientDetailCard
-          client={client}
-          user={user}
-          onEditClick={() => setEditMode(true)}
-        />
-        {client.scheduledEvents.map((scheduledEvent) => {
-          if (scheduledEvent.type === "Wedding") {
-            return <WeddingCard scheduledEvent={scheduledEvent} />;
-          } else if (scheduledEvent.type === "Shoot") {
-            return <ShootCard scheduledEvent={scheduledEvent} />;
-          } else {
-            return <MeetingCard scheduledEvent={scheduledEvent} />;
-          }
-        })}
-      </div>
-    );
-  }
+
+  var count = 0;
+  return (
+    <div key={++count}>
+      <ClientDetailCard
+        key={++count}
+        client={client}
+        user={user}
+        allUsers={users}
+      />
+      {client.scheduledEvents.map((scheduledEvent) => {
+        var usersForThisEvent = users.filter(
+          (u) =>
+            u.id === scheduledEvent.user_id ||
+            u.id === scheduledEvent.seconduser_id ||
+            u.id === scheduledEvent.thirduser_id
+        );
+
+        return (
+          <EventCard
+            key={++count}
+            scheduledEvent={scheduledEvent}
+            users={usersForThisEvent}
+          />
+        );
+      })}
+    </div>
+  );
 }

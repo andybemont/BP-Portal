@@ -1,4 +1,4 @@
-import { fetchFilteredClients } from "@/app/lib/data";
+import { fetchAllUsers, fetchFilteredClients } from "@/app/lib/data";
 import ClientsTable from "@/app/ui/clients/table";
 
 export default async function Page(props: {
@@ -10,9 +10,10 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const clients = await fetchFilteredClients(query);
+  const users = await fetchAllUsers();
   return (
     <main>
-      <ClientsTable clients={clients} />
+      <ClientsTable clients={clients} users={users} />
     </main>
   );
 }
