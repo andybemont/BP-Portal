@@ -36,7 +36,6 @@ export default function TemplatesView({
         template={selectedTemplate}
         show={showDeleteTemplateForm}
         handleClose={() => {
-          console.error("help!");
           setShowDeleteTemplateForm(false);
         }}
       />

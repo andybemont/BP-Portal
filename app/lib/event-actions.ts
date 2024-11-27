@@ -82,7 +82,6 @@ const validateEvent = (id: string | null | undefined, formData: FormData) => {
   const validatedFields = extractEventFormData(formData);
 
   if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "See field errors.",
@@ -121,20 +120,16 @@ export async function createEvent(
   prevState: EventFormState,
   formData: FormData
 ) {
-  console.error("test");
-  const validationResult = validateEvent(uuidv4(), formData);
+  const validationResult = validateEvent(await uuidv4(), formData);
 
-  console.error("test2");
   if (validationResult.errors) {
     return {
       errors: validationResult.errors,
       message: validationResult.message,
     } as EventFormState;
   }
-  console.error("test3");
 
   try {
-    console.error(JSON.stringify(validationResult));
     if (validationResult.event) {
       insertScheduledEvent(validationResult.event);
     }

@@ -121,7 +121,6 @@ export async function updateClient(
 }
 
 export async function deleteClient(client: Client) {
-  console.error("whaT??");
   try {
     await sql`
       DELETE FROM scheduledevents WHERE client_id = ${client.id}

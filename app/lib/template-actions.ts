@@ -39,7 +39,6 @@ const validateTemplate = (
   const validatedFields = extractTemplateFormData(formData);
 
   if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "See field errors.",
