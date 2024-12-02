@@ -2,7 +2,7 @@
 
 import { EmailTemplate, User } from "@/app/lib/definitions";
 import { useState } from "react";
-import LabelBox from "../clients/form/controls/label-box";
+import LabelBox from "../shared/controls/label-box";
 import {
   PencilIcon,
   PlusCircleIcon,
@@ -30,7 +30,7 @@ export default function TemplatesView({
   const [showDeleteTemplateForm, setShowDeleteTemplateForm] = useState(false);
 
   return (
-    <>
+    <div className="overflow-hidden rounded-md bg-accent2/30 m-1 p-2 pb-0">
       <TemplateDeleteModal
         user={selectedUser}
         template={selectedTemplate}
@@ -48,88 +48,76 @@ export default function TemplatesView({
           setShowAddTemplateForm(false);
         }}
       />
-      <div className="flex flex-row">
-        <div className="w-1/2 max-w-48">
-          <LabelBox field="user_id" text="User" />
-          <select
-            id="user_id"
-            name="user_id"
-            className="w-full rounded-md border border-gray-200 py-1 text-sm outline-2"
-            defaultValue={selectedUser?.id}
-            onChange={(e) => {
-              setSelectedUser(
-                allUsers.find((u) => u.id === e.target.value) || allUsers[0]
-              );
-              setSelectedTemplate(
-                allTemplates.find((t) => t.user_id === e.target.value)
-              );
-            }}
-          >
-            {allUsers
-              .filter((user) => allTemplates.find((t) => t.user_id === user.id))
-              .map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
-          </select>
-        </div>
-        <div className="w-1/2 max-w-48">
-          <LabelBox field="id" text="Template" />
-          <div className="relative">
-            <select
-              id="id"
-              name="id"
-              className="w-full rounded-md border border-gray-200 py-1 text-sm outline-2"
-              defaultValue={selectedTemplate?.id}
-              onChange={(e) => {
-                setSelectedTemplate(
-                  allTemplates.find((t) => t.id === e.target.value)
-                );
-              }}
-            >
-              {allTemplates
-                .filter((t) => t.user_id === selectedUser?.id)
-                .map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.title}
-                  </option>
-                ))}
-            </select>
-          </div>
-        </div>
-      </div>
-      <div
-        className="flex flex-row my-4 cursor-pointer"
-        onClick={() =>
-          navigator.clipboard.writeText(selectedTemplate?.text || "")
-        }
-      >
+      <div className="flex flex-row flex-wrap space-x-2 mb-4">
+        <select
+          id="user_id"
+          name="user_id"
+          className="w-full rounded-md bg-white/50 border-black/50 py-1 text-sm outline-2 h-8 max-w-[100px]"
+          defaultValue={selectedUser?.id}
+          onChange={(e) => {
+            setSelectedUser(
+              allUsers.find((u) => u.id === e.target.value) || allUsers[0]
+            );
+            setSelectedTemplate(
+              allTemplates.find((t) => t.user_id === e.target.value)
+            );
+          }}
+        >
+          {allUsers
+            .filter((user) => allTemplates.find((t) => t.user_id === user.id))
+            .map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+        </select>
+        <select
+          id="id"
+          name="id"
+          className="w-full bg-white/50 rounded-md border-black/50 py-1 text-sm outline-2 h-8 max-w-[200px]"
+          defaultValue={selectedTemplate?.id}
+          onChange={(e) => {
+            setSelectedTemplate(
+              allTemplates.find((t) => t.id === e.target.value)
+            );
+          }}
+        >
+          {allTemplates
+            .filter((t) => t.user_id === selectedUser?.id)
+            .map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.title}
+              </option>
+            ))}
+        </select>
         <PencilIcon
-          className="text-blue-600 h-6 pl-3 cursor-pointer"
+          className="cursor-pointer h-6 mt-1"
           onClick={() => setShowEditTemplateForm(true)}
         />
         <PlusCircleIcon
-          className="text-blue-600 h-6 pl-3 cursor-pointer"
+          className="cursor-pointer h-6 mt-1"
           onClick={() => {
             setShowAddTemplateForm(true);
           }}
         />
         <TrashIcon
-          className="text-red-600 h-6 pl-3 cursor-pointer"
+          className="text-warning cursor-pointer h-6 mt-1"
           onClick={() => {
             setShowDeleteTemplateForm(true);
           }}
         />
-        <ClipboardDocumentCheckIcon className="text-blue-600 pl-3 h-6" />
+        <div
+          className="cursor-pointer"
+          onClick={() =>
+            navigator.clipboard.writeText(selectedTemplate?.text || "")
+          }
+        >
+          <ClipboardDocumentCheckIcon className="h-6 mt-1" />
+        </div>
       </div>
-      <textarea
-        id="notes"
-        name="notes"
-        value={selectedTemplate?.text}
-        className="h-96 peer block w-full cursor-pointer rounded-md border border-gray-200 m-0 p-0 text-sm outline-2 "
-        readOnly
-      />
-    </>
+      <p className="whitespace-pre text-wrap overflow-y-auto h-96 peer block w-full cursor-pointer rounded-md border border-black/50 m-0 p-1 text-sm outline-2 ">
+        {selectedTemplate?.text}
+      </p>
+    </div>
   );
 }

@@ -4,6 +4,7 @@ import {
   UserGroupIcon,
   EnvelopeIcon,
   CalendarIcon,
+  CameraIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,6 +20,11 @@ const links = [
     href: "/home/email-templates",
     icon: EnvelopeIcon,
   },
+  {
+    name: "Instagram Helper",
+    href: "/home/instagram",
+    icon: CameraIcon,
+  },
 ];
 
 export default function NavLinks() {
@@ -33,9 +39,9 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
             className={clsx(
-              "text-red-950 flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-amber-100 md:flex-none md:justify-start md:p-2 md:px-3",
+              "transition-all text-black flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-accent2/50 p-3 text-sm font-medium hover:bg-accent2 hover:text-white/80 md:flex-none md:justify-start md:p-2 md:px-3",
               {
-                "bg-amber-100 text-red-950": pathname === link.href,
+                "bg-accent1 text-black": pathname === link.href,
               }
             )}
           >

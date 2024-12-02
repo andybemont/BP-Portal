@@ -23,33 +23,31 @@ export default function ClientsTable({
         users={users}
         handleClose={() => setShowAddClientForm(false)}
       />
-      <div className="w-full flow-root overflow-x-auto text-red-950">
+      <div className="w-full flow-root overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
-          <div className="overflow-hidden rounded-md bg-amber-100 p-2 pb-0">
-            <h1 className={`mb-8 text-xl md:text-2xl`}>Clients</h1>
-            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 w-96">
+          <div className="overflow-hidden rounded-md bg-accent2/30 m-1 p-2 pb-0">
+            <h1 className={`mb-2 text-xl md:text-2xl`}>Clients</h1>
+            <div className="flex items-center gap-2">
               <Search placeholder="Search anything..." />
               <PlusCircleIcon
-                className="h-5 px-2 cursor-pointer"
+                className="h-6 px-2 cursor-pointer"
                 onClick={() => {
                   setShowAddClientForm(true);
                 }}
               />
             </div>
-            <div className="mt-6 inline-block min-w-full align-middle">
-              <div className="overflow-hidden p-2 md:pt-0">
-                <div>
-                  {clients?.map((client) => (
-                    <Link
-                      href={`/home/clients/${client.id}/view`}
-                      key={client.id}
-                    >
-                      <p className="w-full rounded-md mb-2 p-1 bg-white/50 font-medium border-red-950/50 border hover:bg-transparent">
-                        {client.primarypersonname}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
+            <div className="mt-2 inline-block w-full align-middle">
+              <div className="overflow-hidden py-2 md:pt-0">
+                {clients?.map((client) => (
+                  <Link
+                    href={`/home/clients/${client.id}/view`}
+                    key={client.id}
+                  >
+                    <p className="w-full rounded-md mb-2 p-1 hover:bg-white/50 font-medium border-black/50 border bg-transparent">
+                      {client.primarypersonname}
+                    </p>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

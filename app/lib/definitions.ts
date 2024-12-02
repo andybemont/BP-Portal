@@ -15,9 +15,35 @@ export type Client = {
   primarypersonphone?: string;
 };
 
-export type ScheduledEvent = {
+export type Task = {
   id: string;
-  type: "Wedding" | "Meeting" | "Shoot";
+  event_id?: string;
+  user_id?: string;
+  token?: string;
+  name: string;
+  notes?: string;
+  available_date?: Date;
+  completed_date?: Date;
+};
+
+export type CalendarEntry = {
+  client_id: string;
+  client_name: string;
+  event_id: string;
+  task_id?: string;
+  user_id?: string;
+  user_name?: string;
+  seconduser_id?: string;
+  seconduser_name?: string;
+  thirduser_id?: string;
+  thirduser_name?: string;
+  date?: Date;
+  text: string;
+};
+
+export type Event = {
+  id: string;
+  type: string;
   client_id: string;
   client_name?: string;
   user_id?: string;
@@ -40,7 +66,11 @@ export type ScheduledEvent = {
 };
 
 export type ClientDetails = Client & {
-  scheduledEvents: ScheduledEvent[];
+  events: EventDetails[];
+};
+
+export type EventDetails = Event & {
+  tasks: Task[];
 };
 
 export type EmailTemplate = {

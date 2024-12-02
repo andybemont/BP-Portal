@@ -26,7 +26,7 @@ export default function ClientDetailForm({
 
   var count = 0;
   return (
-    <div key={++count}>
+    <div key={++count} className="m-1">
       <div key={client.id + "_details"}>
         <EventAddEditModal
           handleClose={() => setShowAddEventForm(false)}
@@ -47,7 +47,7 @@ export default function ClientDetailForm({
         />
         <div
           key={"client"}
-          className={`rounded-md bg-amber-100 md:p-2 mb-1 text-red-950`}
+          className={`rounded-md bg-accent2/30 p-1 mb-1 text-black`}
         >
           <div className="mb-2 block text-md font-medium flex flex-row">
             <h1>
@@ -55,17 +55,17 @@ export default function ClientDetailForm({
               {` (${user?.name}'s client)`}
             </h1>
             <PencilIcon
-              className="text-red-950 h-5 pl-3 cursor-pointer"
+              className="text-black h-6 pl-3 pt-1 cursor-pointer"
               onClick={() => setShowEditClientForm(true)}
             />
             <PlusCircleIcon
-              className="text-red-950 h-5 pl-3 cursor-pointer"
+              className="text-black h-6 pl-3 pt-1 cursor-pointer"
               onClick={() => {
                 setShowAddEventForm(true);
               }}
             />
             <TrashIcon
-              className="text-red-600 h-5 pl-3 cursor-pointer"
+              className="text-warning h-6 pl-3 pt-1 cursor-pointer"
               onClick={() => {
                 setShowDeleteClientForm(true);
               }}
@@ -88,21 +88,8 @@ export default function ClientDetailForm({
               <span className="font-bold">Notes:</span> {client?.notes}
             </p>
           )}
-          {client.scheduledEvents.map((scheduledEvent) => {
-            var usersForThisEvent = users.filter(
-              (u) =>
-                u.id === scheduledEvent.user_id ||
-                u.id === scheduledEvent.seconduser_id ||
-                u.id === scheduledEvent.thirduser_id
-            );
-
-            return (
-              <EventCard
-                key={++count}
-                scheduledEvent={scheduledEvent}
-                users={usersForThisEvent}
-              />
-            );
+          {client.events.map((event) => {
+            return <EventCard key={++count} event={event} users={users} />;
           })}
         </div>
       </div>

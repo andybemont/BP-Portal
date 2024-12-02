@@ -123,7 +123,10 @@ export async function updateClient(
 export async function deleteClient(client: Client) {
   try {
     await sql`
-      DELETE FROM scheduledevents WHERE client_id = ${client.id}
+      DELETE FROM tasks WHERE event_id in (SELECT id FROM events WHERE client_id = ${client.id})
+    `;
+    await sql`
+      DELETE FROM events WHERE client_id = ${client.id}
     `;
     await sql`
       DELETE FROM clients WHERE id = ${client.id}

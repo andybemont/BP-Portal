@@ -1,5 +1,5 @@
-import { fetchScheduledEvents } from "@/app/lib/data";
-import ScheduledEventTable from "@/app/ui/upcoming/table";
+import { fetchCalendar } from "@/app/lib/data";
+import EventTable from "@/app/ui/calendar/table";
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -7,10 +7,10 @@ export default async function Page(props: {
     page?: string;
   }>;
 }) {
-  const scheduledEvents = await fetchScheduledEvents();
+  const calendarEntries = await fetchCalendar();
   return (
     <main>
-      <ScheduledEventTable scheduledEvents={scheduledEvents} />
+      <EventTable calendarEntries={calendarEntries} />
     </main>
   );
 }

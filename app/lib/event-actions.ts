@@ -3,10 +3,10 @@
 import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
-import { ScheduledEvent } from "./definitions";
-import { insertScheduledEvent, updateScheduledEvent } from "./data";
+import { Event } from "./definitions";
+import { insertEventRecord, updateEventRecord } from "./data";
 import { nullIfEmpty, uuidv4 } from "./helpers";
-import { revalidatePath } from "next/cache";
+import { ensureTasksForEvent } from "./workflow-actions";
 
 const EventFormSchema = z.object({
   id: z.string(),
@@ -89,7 +89,7 @@ const validateEvent = async (
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "See field errors.",
-      event: null as ScheduledEvent | null,
+      event: null as Event | null,
     };
   }
 
@@ -116,7 +116,7 @@ const validateEvent = async (
       location3: validatedFields.data.location3 || undefined,
       location4: validatedFields.data.location4 || undefined,
       pixieseturl: validatedFields.data.pixieseturl || undefined,
-    } as ScheduledEvent,
+    } as Event,
   };
 };
 
@@ -135,7 +135,8 @@ export async function createEvent(
 
   try {
     if (validationResult.event) {
-      insertScheduledEvent(validationResult.event);
+      await insertEventRecord(validationResult.event);
+      await ensureTasksForEvent(validationResult.event.id);
     }
   } catch (error) {
     console.error(error);
@@ -161,7 +162,8 @@ export async function updateEvent(
 
   try {
     if (validationResult.event) {
-      updateScheduledEvent(validationResult.event);
+      await updateEventRecord(validationResult.event);
+      await ensureTasksForEvent(id);
     }
   } catch (error) {
     return { message: "Database Error: Failed to update event." };
@@ -169,10 +171,13 @@ export async function updateEvent(
   redirect(`/home/clients/${validationResult.event?.client_id}/view`);
 }
 
-export async function deleteEvent(event: ScheduledEvent) {
+export async function deleteEvent(event: Event) {
   try {
     await sql`
-      DELETE FROM scheduledevents WHERE id = ${event.id}
+      DELETE FROM tasks WHERE event_id = ${event.id}
+    `;
+    await sql`
+      DELETE FROM events WHERE id = ${event.id}
     `;
   } catch (error) {
     return { message: "Database Error: Failed to delete event." };
