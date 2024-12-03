@@ -11,12 +11,15 @@ const config: Config = {
     colors: {
       transparent: "transparent",
       current: "currentColor",
-      white: "#e0e7ff", // indigo-50
-      black: "#172554", // blue-950
-      accent1: "#831843", //pink-800
-      accent2: "#0e7490", //cyan-700
-      accent3: "#c2410c", // orange-600
-      warning: "#dc2626", // red-600
+      green: "#279989",
+      blue: "#00718E",
+      darkblue: "#003A70",
+      gray: "#404653",
+      white: "#F7F7F7",
+      black: "#000000",
+      pop1: "#D0DF68",
+      pop2: "#A5DCE8",
+      warning: "#dc2626",
     },
     extend: {
       gridTemplateColumns: {

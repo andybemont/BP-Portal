@@ -30,7 +30,7 @@ export default function TemplatesView({
   const [showDeleteTemplateForm, setShowDeleteTemplateForm] = useState(false);
 
   return (
-    <div className="overflow-hidden rounded-md bg-accent2/30 m-1 p-2 pb-0">
+    <div className="overflow-hidden rounded-md bg-green/20 m-1 p-2 pb-0">
       <TemplateDeleteModal
         user={selectedUser}
         template={selectedTemplate}

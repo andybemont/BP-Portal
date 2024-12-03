@@ -26,21 +26,21 @@ export default function LoginForm() {
         <div className="w-full">
           <div>
             <label
-              className="mb-3 mt-5 block text-xs font-medium text-accent2"
+              className="mb-3 mt-5 block text-xs font-medium text-blue"
               htmlFor="email"
             >
               Email
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-white py-[9px] pl-10 text-sm outline-2 placeholder:text-accent2"
+                className="peer block w-full rounded-md border border-white py-[9px] pl-10 text-sm outline-2 placeholder:text-blue"
                 id="email"
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
                 required
               />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-accent2 peer-focus:text-black" />
+              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-blue peer-focus:text-black" />
             </div>
           </div>
           <div className="mt-4">
@@ -52,7 +52,7 @@ export default function LoginForm() {
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-accent2 py-[9px] pl-10 text-sm outline-2 placeholder:text-accent2"
+                className="peer block w-full rounded-md border border-blue py-[9px] pl-10 text-sm outline-2 placeholder:text-blue"
                 id="password"
                 type="password"
                 name="password"
@@ -60,7 +60,7 @@ export default function LoginForm() {
                 required
                 minLength={6}
               />
-              <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-accent2 peer-focus:text-black" />
+              <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-blue peer-focus:text-black" />
             </div>
           </div>
         </div>

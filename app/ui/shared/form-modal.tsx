@@ -18,8 +18,8 @@ export default function FormModal({
 }) {
   return (
     <form action={formAction}>
-      <div className="z-10 fixed inset-0 bg-black/30 h-screen w-screen flex justify-center overflow-y-auto">
-        <div className="p-2 relative border border-black w-full overflow-y-auto shadow-lg rounded-md bg-accent2 max-w-[600px] text-white ">
+      <div className="z-10 fixed inset-0 bg-gray/70 h-screen w-screen flex justify-center overflow-y-auto">
+        <div className="p-2 relative border border-black w-full overflow-y-auto shadow-lg rounded-md bg-darkblue max-w-[600px] text-white ">
           <div className="text-center">
             <h3 className="text-2xl font-bold">{title}</h3>
             <div className="m-0 p-0">
@@ -34,13 +34,13 @@ export default function FormModal({
             <div className="flex justify-center my-2">
               <Button
                 onClick={handleClose}
-                className="hover:bg-white/60 hover:text-black"
+                className="hover:border-black hover:bg-pop2/70 hover:text-black border-gray bg-white text-gray"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="hover:bg-white/60 hover:text-black"
+                className="hover:border-black hover:bg-pop2/70 hover:text-black border-gray bg-white text-gray"
               >
                 Save
               </Button>

@@ -25,7 +25,7 @@ export default function ClientsTable({
       />
       <div className="w-full flow-root overflow-x-auto">
         <div className="inline-block min-w-full align-middle">
-          <div className="overflow-hidden rounded-md bg-accent2/30 m-1 p-2 pb-0">
+          <div className="overflow-hidden rounded-md bg-blue/20 m-1 p-2 pb-0">
             <h1 className={`mb-2 text-xl md:text-2xl`}>Clients</h1>
             <div className="flex items-center gap-2">
               <Search placeholder="Search anything..." />

@@ -1,3 +1,5 @@
+"use server";
+
 import { sql } from "@vercel/postgres";
 import {
   CalendarEntry,
@@ -9,6 +11,7 @@ import {
   User,
 } from "./definitions";
 import { db } from "@vercel/postgres";
+import { checkForNewlyAvailableTasks } from "./workflow-actions";
 const client = await db.connect();
 
 export async function fetchCalendar() {
@@ -292,21 +295,45 @@ export async function insertTask(task: Task) {
   }
 }
 
-export async function markTaskComplete(id: string) {
+export async function markTaskComplete(task_id: string, event_id: string) {
   try {
     const sql = `
-    UPDATE tasks SET complete_date = CURRENT_DATE WHERE id = ${id}`;
+    UPDATE tasks SET completed_date = CURRENT_DATE WHERE id = '${task_id}'`;
     await client.query(sql);
+    await checkForNewlyAvailableTasks(event_id);
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to mark task complete.");
   }
 }
 
+export async function markTaskNotComplete(task_id: string, event_id: string) {
+  try {
+    const sql = `
+    UPDATE tasks SET completed_date = null WHERE id = '${task_id}'`;
+    await client.query(sql);
+    await checkForNewlyAvailableTasks(event_id);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to mark task NOT complete.");
+  }
+}
+
 export async function markTaskAvailable(id: string) {
   try {
     const sql = `
-    UPDATE tasks SET available_date = CURRENT_DATE WHERE id = ${id}`;
+    UPDATE tasks SET available_date = CURRENT_DATE WHERE id = '${id}'`;
+    await client.query(sql);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to mark task available.");
+  }
+}
+
+export async function markTaskNotAvailable(id: string) {
+  try {
+    const sql = `
+    UPDATE tasks SET available_date = null WHERE id = '${id}'`;
     await client.query(sql);
   } catch (error) {
     console.error("Database Error:", error);

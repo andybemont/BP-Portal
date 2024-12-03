@@ -25,14 +25,14 @@ export default function DeleteModal({
             <div className="flex justify-center my-2">
               <Button
                 onClick={onCancel}
-                className="hover:bg-accent2/60 hover:text-black mx-1"
+                className="hover:border-black hover:bg-pop2/50 hover:text-black border-gray bg-white text-gray"
               >
                 Cancel
               </Button>
               <Button
                 type="button"
                 onClick={onDelete}
-                className="hover:bg-warning mx-1"
+                className="hover:border-black hover:bg-warning hover:text-black border-warning bg-white text-warning"
               >
                 Do it!
               </Button>

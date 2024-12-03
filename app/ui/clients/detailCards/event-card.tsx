@@ -1,7 +1,11 @@
 "use client";
 
 import { Event, User } from "@/app/lib/definitions";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  PencilIcon,
+  TrashIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import EventAddEditModal from "./event-add-edit-modal";
 import EventDeleteModal from "./event-delete-modal";
@@ -17,8 +21,13 @@ export default function EventCard({
   event: Event;
   users: User[];
 }) {
+  const [expanded, setExpanded] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDeleteEventForm, setShowDeleteEventForm] = useState(false);
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
 
   const inThePast = event.date && event.date < new Date();
   const delivered = event.pixieseturl;
@@ -56,7 +65,7 @@ export default function EventCard({
       >
         <div className="block text-md font-medium">
           <div className="flex flex-row">
-            <p className="font-bold">
+            <p className="font-bold" onClick={toggleExpanded}>
               {`${event.date?.toLocaleDateString() || "Unscheduled"} - ${
                 event.title || event.type
               } (${
@@ -75,39 +84,48 @@ export default function EventCard({
                 setShowDeleteEventForm(true);
               }}
             />
+            <ChevronDownIcon
+              className="h-5 pl-2 cursor-pointer"
+              onClick={toggleExpanded}
+            />
+            <div className="grow cursor-pointer" onClick={toggleExpanded} />
           </div>
-          {event.pixieseturl && (
-            <p>
-              Gallery:{" "}
-              <a href={event.pixieseturl} className="underline">
-                {event.pixieseturl}
-              </a>
-            </p>
-          )}
-          <p className="flex flex-row overflow-wrap">
-            {event.cost && `$${event.cost}`}
-          </p>
-          <p>{event.duration && `${event.duration} Hours`}</p>
-          <p>
-            {event.engagementsession &&
-              `${event.engagementsession ? "" : "No "} Engagement Session`}
-          </p>
-          <p>
-            {event.priorityediting &&
-              `${event.priorityediting ? "" : "No "} Priority Editing`}
-          </p>
-          <p>
-            {event.numphotographers &&
-              `${event.numphotographers} Photographers`}
-          </p>
-          <p>{event.location && `City/Town: ${event.location}`}</p>
-          <p>{event.location2 && `Reception Venue: ${event.location2}`}</p>
-          <p>{event.location3 && `Addl. Location: ${event.location3}`}</p>
-          <p>{event.location4 && `Addl. Location: ${event.location4}`}</p>
-          {event.notes && (
-            <p className="border-t-2 border-slate-600 whitespace-pre text-wrap overflow-y-auto text-sm">
-              {event.notes}
-            </p>
+          {expanded && (
+            <>
+              {event.pixieseturl && (
+                <p>
+                  Gallery:{" "}
+                  <a href={event.pixieseturl} className="underline">
+                    {event.pixieseturl}
+                  </a>
+                </p>
+              )}
+              <p className="flex flex-row overflow-wrap">
+                {event.cost && `$${event.cost}`}
+              </p>
+              <p>{event.duration && `${event.duration} Hours`}</p>
+              <p>
+                {event.engagementsession &&
+                  `${event.engagementsession ? "" : "No "} Engagement Session`}
+              </p>
+              <p>
+                {event.priorityediting &&
+                  `${event.priorityediting ? "" : "No "} Priority Editing`}
+              </p>
+              <p>
+                {event.numphotographers &&
+                  `${event.numphotographers} Photographers`}
+              </p>
+              <p>{event.location && `City/Town: ${event.location}`}</p>
+              <p>{event.location2 && `Reception Venue: ${event.location2}`}</p>
+              <p>{event.location3 && `Addl. Location: ${event.location3}`}</p>
+              <p>{event.location4 && `Addl. Location: ${event.location4}`}</p>
+              {event.notes && (
+                <p className="border-t-2 border-slate-600 whitespace-pre text-wrap overflow-y-auto text-sm">
+                  {event.notes}
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

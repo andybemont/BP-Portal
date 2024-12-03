@@ -3,7 +3,12 @@ import { Event, Task } from "./definitions";
 import { andyWedding, StandardTask, Workflow } from "./workflow-definitions";
 import { userIds } from "./backup";
 import { uuidv4 } from "./helpers";
-import { fetchEventDetailsById, insertTask, markTaskAvailable } from "./data";
+import {
+  fetchEventDetailsById,
+  insertTask,
+  markTaskAvailable,
+  markTaskNotAvailable,
+} from "./data";
 
 export const getWorkflowForEvent = (event: Event) => {
   if (event.user_id === userIds.andy && event.type === "Wedding") {
@@ -48,26 +53,26 @@ export const checkForNewlyAvailableTasks = async (event_id: string) => {
   const completedTaskTokens = event.tasks
     .filter((t) => t.completed_date)
     .map((t) => t.token);
+
   event.tasks.map(async (task) => {
-    if (task.available_date) {
-      // Task is already available (or even complete)
-      return;
-    }
     const taskDef = workflow.tasks.find((wft) => task.token === wft.token);
     if (!taskDef) {
       // This task is not part of the standard workflow
       return;
     }
-    if (
-      taskDef.prerequisites?.find(
-        (required) =>
-          !completedTaskTokens.find((completed) => completed === required)
-      )
-    ) {
-      // There's still a prerequisite that isn't completed, so nothing to do
-      return;
+    const isAvailable = task.available_date;
+    const shouldBeAvailable = !taskDef.prerequisites?.find(
+      (prerequisite) =>
+        !completedTaskTokens.find((completed) => completed === prerequisite)
+    );
+
+    if (isAvailable && !shouldBeAvailable) {
+      // Task is available but shouldn't be (probably based on a another task completion being undone)
+      await markTaskNotAvailable(task.id);
+    } else if (!isAvailable && shouldBeAvailable) {
+      // Task is not available but should be (probably based on another task being completed)
+      await markTaskAvailable(task.id);
     }
-    await markTaskAvailable(task.id);
   });
 };
 

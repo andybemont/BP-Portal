@@ -26,19 +26,19 @@ export default function UserPicker({
         <select
           id={field}
           name={field}
-          className="w-full rounded-md border border-accent2 py-1 text-sm outline-2 focus:outline-transparent focus:ring-transparent focus:border-black p-1 bg-white/50"
+          className="w-full rounded-md py-1 text-sm outline-2 focus:outline-transparent focus:ring-transparent focus:border-black p-1 bg-white/50"
           defaultValue={defaultValue}
           aria-describedby="customer-error"
         >
           {showUnassigned && (
-            <option value="" className="bg-white text-black">
+            <option value="" className="bg-gray/50 text-black">
               Unassigned
             </option>
           )}
           {users.map((user) => (
             <option
               key={user.id}
-              className="bg-white text-black"
+              className="bg-gray/50 text-black"
               value={user.id}
             >
               {user.name}

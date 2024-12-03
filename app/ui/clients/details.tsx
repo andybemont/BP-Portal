@@ -47,7 +47,7 @@ export default function ClientDetailForm({
         />
         <div
           key={"client"}
-          className={`rounded-md bg-accent2/30 p-1 mb-1 text-black`}
+          className={`rounded-md bg-blue/20 p-1 mb-1 text-black`}
         >
           <div className="mb-2 block text-md font-medium flex flex-row">
             <h1>
