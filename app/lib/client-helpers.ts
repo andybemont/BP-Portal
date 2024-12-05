@@ -25,13 +25,6 @@ export const toNiceDateString = (date?: Date) => {
     return "Unscheduled";
   } else {
     const d = new Date(date.toUTCString());
-    console.error(
-      JSON.stringify({
-        input: date,
-        afterAdjustment: d,
-        getUTCDate: d.getUTCDate(),
-      })
-    );
     return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
   }
 };
