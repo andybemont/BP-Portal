@@ -5,6 +5,7 @@ import {
   EnvelopeIcon,
   CalendarIcon,
   CameraIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,6 +25,11 @@ const links = [
     name: "Instagram Helper",
     href: "/home/instagram",
     icon: CameraIcon,
+  },
+  {
+    name: "Links",
+    href: "/home/links",
+    icon: ArrowTopRightOnSquareIcon,
   },
 ];
 
