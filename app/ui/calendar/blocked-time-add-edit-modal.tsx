@@ -29,7 +29,7 @@ export default function BlockedTimeAddEditModal({
     : useActionState(insertBlockedTime, initialState);
 
   useEffect(() => {
-    if (state.success) {
+    if (state && state?.success) {
       state.success = false;
       handleClose(true);
     }
@@ -49,7 +49,7 @@ export default function BlockedTimeAddEditModal({
             field="text"
             type="text"
             defaultValue={blockedTimeToEdit?.text}
-            errors={state.errors?.text}
+            errors={state?.errors?.text}
           />
         </div>
         <div className="flex flex-row">
@@ -59,7 +59,7 @@ export default function BlockedTimeAddEditModal({
               field="start_date"
               type="date"
               defaultValue={blockedTimeToEdit?.date?.toISOString().slice(0, 10)}
-              errors={state.errors?.start_date}
+              errors={state?.errors?.start_date}
             />
           </div>
           <div className="ml-1 grow">
@@ -70,7 +70,7 @@ export default function BlockedTimeAddEditModal({
               defaultValue={blockedTimeToEdit?.end_date
                 ?.toISOString()
                 .slice(0, 10)}
-              errors={state.errors?.end_date}
+              errors={state?.errors?.end_date}
             />
           </div>
         </div>

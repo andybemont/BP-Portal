@@ -80,6 +80,7 @@ export async function insertBlockedTime(
 
   if (validationResult.errors) {
     return {
+      success: false,
       errors: validationResult.errors,
       message: validationResult.message,
     } as BlockedTimeFormState;
@@ -108,6 +109,8 @@ export async function insertBlockedTime(
 
     return {
       success: true,
+      errors: undefined,
+      message: "Success!",
     } as BlockedTimeFormState;
   } catch (error) {
     console.error("Database Error:", error);
@@ -124,6 +127,7 @@ export async function updateBlockedTime(
 
   if (validationResult.errors) {
     return {
+      success: false,
       errors: validationResult.errors,
       message: validationResult.message,
     } as BlockedTimeFormState;
@@ -143,6 +147,8 @@ export async function updateBlockedTime(
     await client.query(sql);
     return {
       success: true,
+      errors: undefined,
+      message: "Success!",
     } as BlockedTimeFormState;
   } catch (error) {
     console.error("Database Error:", error);

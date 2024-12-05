@@ -11,15 +11,35 @@ export default function Page() {
           <p
             className={`${lusitana.className} text-xl text-black md:text-3xl md:leading-normal`}
           >
-            <strong>Welcome to Acme.</strong> This is the example for the{" "}
-            <a href="https://nextjs.org/learn/" className="text-accent3">
-              Next.js Learn Course
+            <strong>
+              Welcome to the{" "}
+              <a
+                href="https://www.bemontphoto.com/"
+                className="text-pop1 underline bg-"
+              >
+                Bemont Photo
+              </a>{" "}
+              employee portal
+            </strong>
+            , helping{" "}
+            <a
+              href="https://www.bemontphoto.com/team"
+              className="text-darkblue underline"
+            >
+              exceptional photographers
+            </a>{" "}
+            do{" "}
+            <a
+              href="https://www.bemontphoto.com/gallery"
+              className="text-green underline"
+            >
+              exceptional wedding photography
             </a>
-            , brought to you by Vercel.
+            .
           </p>
           <Link
             href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-accent3 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-accent3 md:text-base"
+            className="flex items-center gap-5 self-start rounded-lg bg-pop2 px-6 py-3 text-sm font-medium text-blue transition-colors hover:bg-pop1 hover:text-darkblue md:text-base"
           >
             <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
           </Link>
