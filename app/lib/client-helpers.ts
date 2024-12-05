@@ -19,3 +19,12 @@ export const userNamesByIds = (user_ids: any[]) => {
   }
   return actualUsers.map((userId) => userNameById(userId)).join(", ");
 };
+
+export const toNiceDateString = (date?: Date | string) => {
+  if (!date) {
+    return "Unscheduled";
+  } else {
+    const d = new Date(date);
+    return `${d.getMonth()}/${d.getDate()}`;
+  }
+};

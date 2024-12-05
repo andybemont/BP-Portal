@@ -3,7 +3,7 @@ import { Task, User } from "@/app/lib/definitions";
 import { CheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { markTaskComplete, markTaskNotComplete } from "@/app/lib/data";
-import { userNameById } from "@/app/lib/client-helpers";
+import { toNiceDateString, userNameById } from "@/app/lib/client-helpers";
 import TaskAssignModal from "./task-assign-modal";
 
 export default function TaskEntry({
@@ -64,9 +64,9 @@ export default function TaskEntry({
         <p>
           {`${userNameById(task.user_id)}: ${task.name}`}
           {task.completed_date
-            ? " (Completed " + task.completed_date.toLocaleDateString() + ")"
+            ? " (Completed " + toNiceDateString(task.completed_date) + ")"
             : task.available_date && !isAvailable()
-            ? " (Available " + task.available_date.toLocaleDateString() + ")"
+            ? " (Available " + toNiceDateString(task.available_date) + ")"
             : ""}{" "}
         </p>
         {isAvailable() && (

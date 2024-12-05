@@ -10,6 +10,7 @@ import { useState } from "react";
 import EventAddEditModal from "./event-add-edit-modal";
 import EventDeleteModal from "./event-delete-modal";
 import TaskEntry from "./task-entry";
+import { toNiceDateString } from "@/app/lib/client-helpers";
 
 const colors = {
   complete: "text-black/70 bg-black/30",
@@ -68,7 +69,7 @@ export default function EventCard({
         <div className="block text-md font-medium">
           <div className="flex flex-row">
             <p className="font-bold" onClick={toggleExpanded}>
-              {`${event.date?.toLocaleDateString() || "Unscheduled"} - ${
+              {`${toNiceDateString(event.date)} - ${
                 event.title || event.type
               } (${
                 usersForThisEvent.length > 0

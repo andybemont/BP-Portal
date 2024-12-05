@@ -1,7 +1,7 @@
 "use client";
 import { CalendarEntry } from "@/app/lib/definitions";
 import { useState } from "react";
-import { userNamesByIds } from "@/app/lib/client-helpers";
+import { toNiceDateString, userNamesByIds } from "@/app/lib/client-helpers";
 import BlockedTimeAddEditModal from "./blocked-time-add-edit-modal";
 import { useRouter } from "next/navigation";
 
@@ -28,7 +28,7 @@ export default function BlockedTimeEntry({ e }: { e: CalendarEntry }) {
         className={`cursor-pointer w-full text-sm rounded-md mb-2 p-1 font-medium border border-black/50 flex flex-row bg-darkblue text-white`}
       >
         <p className="">
-          {`${e.date?.toLocaleDateString()} - ${e.end_date?.toLocaleDateString()}: ${
+          {`${toNiceDateString(e.date)} - ${toNiceDateString(e.end_date)}: ${
             e.text
           } (${userNamesByIds([e.user_id, e.seconduser_id, e.thirduser_id])})`}
         </p>
