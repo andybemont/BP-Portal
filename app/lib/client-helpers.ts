@@ -25,6 +25,7 @@ export const toNiceDateString = (date?: Date | string) => {
     return "Unscheduled";
   } else {
     const d = new Date(date);
-    return `${d.getMonth()}/${d.getDate()}`;
+    d.setHours(d.getUTCHours() + 5);
+    return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
   }
 };
