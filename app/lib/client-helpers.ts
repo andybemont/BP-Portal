@@ -26,7 +26,13 @@ export const toNiceDateString = (date?: Date | string) => {
   } else {
     const d = new Date(date);
     d.setHours(d.getUTCHours() + 5);
-    console.error(d);
+    console.error(
+      JSON.stringify({
+        input: date,
+        afterAdjustment: d,
+        getUTCDate: d.getUTCDate(),
+      })
+    );
     return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
   }
 };
