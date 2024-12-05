@@ -26,8 +26,8 @@ export default function FormModal({
               {children}
 
               <div aria-live="polite" aria-atomic="true">
-                {state.message && state.errors && (
-                  <p className="my-2 text-sm text-warning">{state.message}</p>
+                {state?.message && state?.errors && (
+                  <p className="my-2 text-sm text-warning">{state?.message}</p>
                 )}
               </div>
             </div>

@@ -1,16 +1,39 @@
 import bcrypt from "bcrypt";
 import { backup } from "../../lib/backup";
 import { db } from "@vercel/postgres";
-import { insertEventRecord, insertTask } from "@/app/lib/data";
+import {
+  insertBlockedTime,
+  insertEventRecord,
+  insertTask,
+} from "@/app/lib/data";
 const client = await db.connect();
 
 async function prep() {
+  await client.sql`DROP TABLE IF EXISTS blockedtimes`;
   await client.sql`DROP TABLE IF EXISTS tasks`;
   await client.sql`DROP TABLE IF EXISTS events`;
   await client.sql`DROP TABLE IF EXISTS clients`;
   await client.sql`DROP TABLE IF EXISTS users`;
   await client.sql`DROP TABLE IF EXISTS emailtemplates`;
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+}
+
+async function seedBlockedTimes() {
+  await client.sql`
+     CREATE TABLE blockedtimes (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        start_date DATE NOT NULL,
+        end_Date DATE NOT NULL,
+        andy BOOLEAN NOT NULL,
+        carly BOOLEAN NOT NULL,
+        gillian BOOLEAN NOT NULL,
+        text VARCHAR(100) NOT NULL
+     );
+   `;
+  const inserted = await Promise.all(
+    backup.blockedtimes.map(async (e) => insertBlockedTime(e))
+  );
+  return inserted;
 }
 
 async function seedUsers() {
@@ -152,6 +175,7 @@ export async function GET() {
   try {
     await client.sql`BEGIN`;
     await prep();
+    await seedBlockedTimes();
     await seedUsers();
     await seedClients();
     await seedEvents();

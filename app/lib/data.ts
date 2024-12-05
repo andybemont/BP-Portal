@@ -2,7 +2,7 @@
 
 import { sql } from "@vercel/postgres";
 import {
-  CalendarEntry,
+  BlockedTime,
   Client,
   ClientDetails,
   EmailTemplate,
@@ -12,40 +12,40 @@ import {
 } from "./definitions";
 import { db } from "@vercel/postgres";
 import { checkForNewlyAvailableTasks } from "./workflow-actions";
+import { userIds } from "./backup";
 const client = await db.connect();
 
 export async function fetchCalendar() {
   try {
-    const data = await sql<CalendarEntry>`
+    const sql = `
     select 
       client_id,
       clients.primarypersonname as client_name,
       event_id,
       task_id,
-      users1.id as user_id,
-      users1.name as user_name,
-      users2.id as seconduser_id,
-      users2.name as seconduser_name,
-      users3.id as thirduser_id,
-      users3.name as thirduser_name,
-      date,
-      text
+      e.user_id,
+      seconduser_id,
+      thirduser_id,
+      e.date,
+      text,
+      end_date,
+      blockedtime_id
     from
     (
-        select id as event_id, user_id, seconduser_id, thirduser_id, client_id, date, 'Wedding' as text, null::uuid as task_id from events where type = 'Wedding' and date >= CURRENT_DATE AND pixieseturl is null
+        select null::uuid as blockedtime_id, id as event_id, user_id, seconduser_id, thirduser_id, client_id, date, null::date as end_date, 'Wedding' as text, null::uuid as task_id from events where type = 'Wedding' and date >= CURRENT_DATE AND pixieseturl is null
         union
-        select id, user_id, null, null, client_id, date, title, null::uuid from events where type = 'Shoot' and date >= CURRENT_DATE AND pixieseturl is null
+        select null::uuid, id, user_id, null::uuid, null::uuid, client_id, date, null::date, title, null::uuid from events where type = 'Shoot' and date >= CURRENT_DATE AND pixieseturl is null
         union
-        select id, user_id, null, null, client_id, date, title, null::uuid from events where type = 'Meeting' and date >= CURRENT_DATE
+        select null::uuid, id, user_id, null::uuid, null::uuid, client_id, date, null::date, title, null::uuid from events where type = 'Meeting' and date >= CURRENT_DATE
         union
-        select event_id, tasks.user_id, null, null, client_id, available_date, name, tasks.id from tasks join events on events.id = tasks.event_id where available_date <= CURRENT_DATE and completed_date is null
+        select null::uuid, event_id, tasks.user_id, null::uuid, null::uuid, client_id, available_date, null::date, name, tasks.id from tasks join events on events.id = tasks.event_id where available_date <= CURRENT_DATE and completed_date is null
+        union
+        select id, null::uuid, case when andy then '${userIds.andy}' else null::uuid end, case when carly then '${userIds.carly}' else null::uuid end, case when gillian then '${userIds.gillian}' else null::uuid end, null::uuid, start_date, end_date, text, null::uuid from blockedtimes where start_date >= CURRENT_DATE
     ) e
-    left join users as users1 on users1.id = e.user_id
-    left join users as users2 on users2.id = e.seconduser_id
-    left join users as users3 on users3.id = e.thirduser_id
-    join clients on clients.id = e.client_id
-    order by date
+    left join clients on clients.id = e.client_id
+    order by e.date
 	  `;
+    const data = await client.query(sql);
     return data.rows;
   } catch (err) {
     console.error("Database Error:", err);
@@ -102,6 +102,7 @@ export async function fetchBackup() {
       tasks: (await sql<Task>`SELECT * FROM tasks`).rows,
       emailtemplates: (await sql<EmailTemplate>`SELECT * FROM emailtemplates`)
         .rows,
+      blockedtimes: (await sql<BlockedTime>`SELECT * FROM blockedtimes`).rows,
     };
   } catch (error) {
     console.error("Database Error:", error);
@@ -263,7 +264,7 @@ export async function insertEventRecord(event: any) {
   }
 }
 
-export async function insertTask(task: Task) {
+export async function insertTask(task: any) {
   const sql = `
    INSERT INTO tasks (
     id,
@@ -304,6 +305,27 @@ export async function markTaskComplete(task_id: string, event_id: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to mark task complete.");
+  }
+}
+
+export async function assignTask(
+  task: { id: string; user_id?: string },
+  prevState: any,
+  formData: FormData
+) {
+  const new_user_id =
+    formData.get("user_id")?.valueOf()?.toString() || undefined;
+
+  try {
+    const sql = `
+    UPDATE tasks SET user_id = ${
+      new_user_id ? `'${new_user_id}'` : "null"
+    } WHERE id = '${task.id}'`;
+    await client.query(sql);
+    return { updated: true, new_user_id: new_user_id };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to assign task.");
   }
 }
 

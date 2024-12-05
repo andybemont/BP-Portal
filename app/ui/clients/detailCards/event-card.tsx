@@ -1,6 +1,6 @@
 "use client";
 
-import { Event, User } from "@/app/lib/definitions";
+import { Event, EventDetails, User } from "@/app/lib/definitions";
 import {
   PencilIcon,
   TrashIcon,
@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import EventAddEditModal from "./event-add-edit-modal";
 import EventDeleteModal from "./event-delete-modal";
+import TaskEntry from "./task-entry";
 
 const colors = {
   complete: "text-black/70 bg-black/30",
@@ -18,10 +19,11 @@ export default function EventCard({
   event,
   users,
 }: {
-  event: Event;
+  event: EventDetails;
   users: User[];
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [showAllTasks, setShowAllTasks] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDeleteEventForm, setShowDeleteEventForm] = useState(false);
 
@@ -91,7 +93,7 @@ export default function EventCard({
             <div className="grow cursor-pointer" onClick={toggleExpanded} />
           </div>
           {expanded && (
-            <>
+            <div>
               {event.pixieseturl && (
                 <p>
                   Gallery:{" "}
@@ -125,7 +127,34 @@ export default function EventCard({
                   {event.notes}
                 </p>
               )}
-            </>
+              {event.tasks?.length > 0 && (
+                <>
+                  <hr />
+                  <p className="text-sm">
+                    <span className="text-xl">Tasks</span>
+                    <span
+                      className="text-sm ml-2 underline cursor-pointer"
+                      onClick={() => setShowAllTasks(!showAllTasks)}
+                    >
+                      {showAllTasks
+                        ? "Only Show Current Tasks"
+                        : "Show All Tasks"}
+                    </span>
+                  </p>
+
+                  {event.tasks?.map((t) => {
+                    return (
+                      <TaskEntry
+                        key={t.id}
+                        task={t}
+                        hideIfUnavailable={!showAllTasks}
+                        allUsers={users}
+                      />
+                    );
+                  })}
+                </>
+              )}
+            </div>
           )}
         </div>
       </div>

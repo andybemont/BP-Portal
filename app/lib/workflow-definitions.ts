@@ -52,7 +52,7 @@ const thirtyDaysBeforeEventDate = (event: Event) => {
   if (!event.date) {
     return undefined;
   }
-  const d = event.date;
+  const d = new Date(event.date);
   d.setDate(d.getDate() - 30);
   return d;
 };

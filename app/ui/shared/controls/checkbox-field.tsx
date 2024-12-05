@@ -6,7 +6,7 @@ export default function CheckboxField({
   caption,
   field,
 }: {
-  defaultValue?: boolean;
+  defaultValue?: any;
   caption: string;
   field: string;
 }) {

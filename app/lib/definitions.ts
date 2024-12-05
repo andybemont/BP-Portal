@@ -26,18 +26,27 @@ export type Task = {
   completed_date?: Date;
 };
 
+export type BlockedTime = {
+  id: string;
+  start_date: Date;
+  end_date: Date;
+  andy: boolean;
+  carly: boolean;
+  gillian: boolean;
+  text: string;
+};
+
 export type CalendarEntry = {
   client_id: string;
   client_name: string;
   event_id: string;
   task_id?: string;
   user_id?: string;
-  user_name?: string;
+  blockedtime_id?: string;
   seconduser_id?: string;
-  seconduser_name?: string;
   thirduser_id?: string;
-  thirduser_name?: string;
   date?: Date;
+  end_date?: Date;
   text: string;
 };
 

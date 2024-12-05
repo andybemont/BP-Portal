@@ -1,4 +1,5 @@
 "use client";
+import { userNamesByIds } from "@/app/lib/client-helpers";
 import { CalendarEntry } from "@/app/lib/definitions";
 import Link from "next/link";
 
@@ -9,13 +10,11 @@ export default function EventEntry({ e }: { e: CalendarEntry }) {
         <p>
           {`${e.date?.toLocaleDateString()}  - ${e.client_name}`}
           <span>{` ${e.text}`}</span>
-          <span>{` (${
-            e.user_name
-              ? [e.user_name, e.seconduser_name, e.thirduser_name]
-                  .filter((p) => p)
-                  .join(", ")
-              : "Unassigned"
-          })`}</span>
+          <span>{` (${userNamesByIds([
+            e.user_id,
+            e.seconduser_id,
+            e.thirduser_id,
+          ])})`}</span>
         </p>
       </div>
     </Link>
