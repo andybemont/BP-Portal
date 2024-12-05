@@ -20,12 +20,11 @@ export const userNamesByIds = (user_ids: any[]) => {
   return actualUsers.map((userId) => userNameById(userId)).join(", ");
 };
 
-export const toNiceDateString = (date?: Date | string) => {
+export const toNiceDateString = (date?: Date) => {
   if (!date) {
     return "Unscheduled";
   } else {
-    const d = new Date(date);
-    d.setHours(d.getUTCHours() + 5);
+    const d = new Date(date.toUTCString());
     console.error(
       JSON.stringify({
         input: date,
