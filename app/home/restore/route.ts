@@ -1,11 +1,8 @@
 import bcrypt from "bcrypt";
 import { backup } from "../../lib/backup";
 import { db } from "@vercel/postgres";
-import {
-  insertBlockedTime,
-  insertEventRecord,
-  insertTask,
-} from "@/app/lib/data";
+import { insertEventRecord, insertTask } from "@/app/lib/data";
+import { insertBlockedTime } from "@/app/lib/blocked-time-actions";
 const client = await db.connect();
 
 async function prep() {
@@ -31,7 +28,26 @@ async function seedBlockedTimes() {
      );
    `;
   const inserted = await Promise.all(
-    backup.blockedtimes.map(async (e) => insertBlockedTime(e))
+    backup.blockedtimes.map(async (e) => {
+      await client.query(`
+      INSERT INTO blockedtimes (
+        id,
+        start_date,
+        end_date,
+        andy,
+        carly,
+        gillian,
+        text
+      ) VALUES (
+        '${e.id}',
+        '${new Date(e.start_date).toISOString()}',
+        '${new Date(e.end_date).toISOString()}',
+         ${e.andy ? "true" : "false"},
+         ${e.carly ? "true" : "false"},
+         ${e.gillian ? "true" : "false"},
+        '${e.text}'
+      )`);
+    })
   );
   return inserted;
 }
