@@ -51,6 +51,10 @@ export default async function Page(props: {
           href="https://www.instagram.com/thebemontphoto/"
           caption="Instagram"
         />
+        <ExternalLink
+          href="https://www.weddingpro.com/dashboard"
+          caption="WeddingPro"
+        />
       </ul>
     </main>
   );
