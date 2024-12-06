@@ -291,7 +291,6 @@ export async function insertTask(task: any) {
     await client.query(sql);
   } catch (error) {
     console.error("Database Error:", error);
-    console.error(sql);
     throw new Error("Failed to create task.");
   }
 }

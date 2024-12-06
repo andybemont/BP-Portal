@@ -1,6 +1,10 @@
-import { sql } from "@vercel/postgres";
-import { Event, Task } from "./definitions";
-import { andyWedding, StandardTask, Workflow } from "./workflow-definitions";
+import { Event } from "./definitions";
+import {
+  andyShoot,
+  andyWedding,
+  carlyShoot,
+  StandardTask,
+} from "./workflow-definitions";
 import { userIds } from "./backup";
 import { uuidv4 } from "./helpers";
 import {
@@ -13,6 +17,10 @@ import {
 export const getWorkflowForEvent = (event: Event) => {
   if (event.user_id === userIds.andy && event.type === "Wedding") {
     return andyWedding;
+  } else if (event.user_id === userIds.andy && event.type === "Shoot") {
+    return andyShoot;
+  } else if (event.user_id === userIds.carly && event.type === "Shoot") {
+    return carlyShoot;
   }
   return null;
 };

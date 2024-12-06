@@ -56,6 +56,14 @@ const thirtyDaysBeforeEventDate = (event: Event) => {
   d.setDate(d.getDate() - 30);
   return d;
 };
+const twoDaysBeforeEventDate = (event: Event) => {
+  if (!event.date) {
+    return undefined;
+  }
+  const d = new Date(event.date);
+  d.setDate(d.getDate() - 2);
+  return d;
+};
 
 export const andyWedding: Workflow = {
   tasks: [
@@ -182,6 +190,127 @@ export const andyWedding: Workflow = {
       token: tasks.SOLICIT_REVIEW,
       caption: "Solicit reviews",
       prerequisites: [tasks.RECORD_FEEDBACK],
+    },
+  ],
+};
+
+export const andyShoot: Workflow = {
+  tasks: [
+    {
+      token: tasks.SEND_BOOKING_CONFIRMATION,
+      caption:
+        "Send booking confirmation email with engagement shoot instructions",
+      prerequisites: [],
+    },
+    {
+      token: tasks.SEND_WEDDING_DAY_CONFIRMATION,
+      caption: "Send confirmation",
+      getSpecialAvailableDate: twoDaysBeforeEventDate,
+    },
+    {
+      token: tasks.MOVE_PICS_TO_PC,
+      caption: "Put pictures on the computer",
+      getSpecialAvailableDate: eventDate,
+    },
+    {
+      token: tasks.BACKUP_PICS,
+      caption: "Copy to NAS",
+      prerequisites: [tasks.MOVE_PICS_TO_PC],
+    },
+    {
+      token: tasks.WAIT_FOR_PAYMENT,
+      caption: "Wait for payment",
+      prerequisites: [tasks.BACKUP_PICS],
+    },
+    {
+      token: tasks.LOAD_LIGHTROOM,
+      caption: "Load into Lightroom",
+      prerequisites: [tasks.MOVE_PICS_TO_PC],
+    },
+    {
+      token: tasks.SECOND_CULL,
+      caption: "2nd pass cull",
+      prerequisites: [tasks.MOVE_PICS_TO_PC, tasks.WAIT_FOR_PAYMENT],
+    },
+    { token: tasks.EDIT, caption: "Edit", prerequisites: [tasks.SECOND_CULL] },
+    {
+      token: tasks.FINAL_EDIT,
+      caption: "2nd pass edit / review",
+      defaultAssignee: userIds.gillian,
+      prerequisites: [tasks.EDIT],
+    },
+    {
+      token: tasks.EXPORT_PICS,
+      caption: "Export pictures",
+      defaultAssignee: userIds.gillian,
+      prerequisites: [tasks.FINAL_EDIT],
+    },
+    {
+      token: tasks.UPLOAD_PIXIESET,
+      caption: "Upload pictures",
+      prerequisites: [tasks.EXPORT_PICS],
+    },
+    {
+      token: tasks.DELIVER_PICS,
+      caption: "Deliver pictures",
+      prerequisites: [tasks.UPLOAD_PIXIESET],
+    },
+  ],
+};
+
+export const carlyShoot: Workflow = {
+  tasks: [
+    {
+      token: tasks.SEND_BOOKING_CONFIRMATION,
+      caption:
+        "Send booking confirmation email with engagement shoot instructions",
+      prerequisites: [],
+    },
+    {
+      token: tasks.SEND_WEDDING_DAY_CONFIRMATION,
+      caption: "Send confirmation",
+      getSpecialAvailableDate: twoDaysBeforeEventDate,
+    },
+    {
+      token: tasks.MOVE_PICS_TO_PC,
+      caption: "Put pictures on the computer",
+      getSpecialAvailableDate: eventDate,
+    },
+    {
+      token: tasks.BACKUP_PICS,
+      caption: "Copy to NAS",
+      prerequisites: [tasks.MOVE_PICS_TO_PC],
+    },
+    {
+      token: tasks.WAIT_FOR_PAYMENT,
+      caption: "Wait for payment",
+      prerequisites: [tasks.BACKUP_PICS],
+    },
+    {
+      token: tasks.LOAD_LIGHTROOM,
+      caption: "Load into Lightroom",
+      prerequisites: [tasks.MOVE_PICS_TO_PC],
+    },
+    {
+      token: tasks.SECOND_CULL,
+      caption: "2nd pass cull",
+      prerequisites: [tasks.MOVE_PICS_TO_PC, tasks.WAIT_FOR_PAYMENT],
+    },
+    { token: tasks.EDIT, caption: "Edit", prerequisites: [tasks.SECOND_CULL] },
+    {
+      token: tasks.EXPORT_PICS,
+      caption: "Export pictures",
+      prerequisites: [tasks.EDIT],
+    },
+    {
+      token: tasks.UPLOAD_PIXIESET,
+      caption: "Upload pictures",
+      prerequisites: [tasks.EXPORT_PICS],
+    },
+    {
+      token: tasks.DELIVER_PICS,
+      caption: "Deliver pictures",
+      prerequisites: [tasks.UPLOAD_PIXIESET],
     },
   ],
 };
