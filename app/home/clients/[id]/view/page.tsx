@@ -2,6 +2,7 @@ import { fetchAllUsers, fetchClientDetailsById } from "@/app/lib/data";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import ClientDetailForm from "@/app/ui/clients/details";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Client",

@@ -1,5 +1,6 @@
 import { fetchAllEmailTemplates, fetchAllUsers } from "@/app/lib/data";
 import TemplatesView from "@/app/ui/email-templates/templates-view";
+export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
   searchParams?: Promise<{

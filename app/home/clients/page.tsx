@@ -1,5 +1,6 @@
 import { fetchAllUsers, fetchFilteredClients } from "@/app/lib/data";
 import ClientsTable from "@/app/ui/clients/table";
+export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
   searchParams?: Promise<{
