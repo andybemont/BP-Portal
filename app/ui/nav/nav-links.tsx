@@ -6,6 +6,7 @@ import {
   CalendarIcon,
   CameraIcon,
   ArrowTopRightOnSquareIcon,
+  DocumentMagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,11 @@ const links = [
     name: "Instagram Helper",
     href: "/home/instagram",
     icon: CameraIcon,
+  },
+  {
+    name: "Reports",
+    href: "/home/reports",
+    icon: DocumentMagnifyingGlassIcon,
   },
   {
     name: "Links",
