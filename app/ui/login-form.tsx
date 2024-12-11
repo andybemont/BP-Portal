@@ -1,6 +1,5 @@
 "use client";
 
-import { authenticate } from "@/app/lib/helpers";
 import { lusitana } from "@/app/ui/fonts";
 import {
   AtSymbolIcon,
@@ -10,6 +9,7 @@ import {
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { Button } from "./shared/button";
 import { useActionState } from "react";
+import { authenticate } from "../lib/helpers/server-side-helpers";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
