@@ -1,6 +1,9 @@
 "use client";
-import { toNiceDateString, userNamesByIds } from "@/app/lib/client-helpers";
-import { CalendarEntry } from "@/app/lib/definitions";
+import {
+  toNiceDateString,
+  userNamesByIds,
+} from "@/app/lib/helpers/client-side-helpers";
+import { CalendarEntry } from "@/app/lib/data-model/definitions";
 import Link from "next/link";
 
 export default function EventEntry({ e }: { e: CalendarEntry }) {

@@ -1,4 +1,4 @@
-import { userIds } from "./backup";
+import { userIds } from "../backup-restore/backup";
 
 export const userNameById = (user_id?: string) => {
   switch (user_id) {
@@ -25,6 +25,8 @@ export const toNiceDateString = (date?: Date) => {
     return "Unscheduled";
   } else {
     const d = new Date(date.toUTCString());
-    return `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
+    return `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${
+      d.getUTCFullYear() % 1000
+    }`;
   }
 };

@@ -1,4 +1,4 @@
-import { fetchAllUsers, fetchFilteredClients } from "@/app/lib/data";
+import { fetchAllUsers, fetchFilteredClients } from "@/app/lib/data-model/data";
 import ClientsTable from "@/app/ui/clients/table";
 export const dynamic = "force-dynamic";
 

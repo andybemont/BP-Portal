@@ -4,7 +4,7 @@ import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 import { EmailTemplate } from "./definitions";
-import { uuidv4 } from "./helpers";
+import { uuidv4 } from "../helpers/server-side-helpers";
 
 const TemplateFormSchema = z.object({
   id: z.string(),

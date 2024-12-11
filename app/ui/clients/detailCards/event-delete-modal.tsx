@@ -1,7 +1,7 @@
 "use client";
 
-import { Event } from "@/app/lib/definitions";
-import { deleteEvent } from "@/app/lib/event-actions";
+import { Event } from "@/app/lib/data-model/definitions";
+import { deleteEvent } from "@/app/lib/data-model/event-actions";
 import DeleteModal from "../../shared/delete-modal";
 
 export default function EventDeleteModal({

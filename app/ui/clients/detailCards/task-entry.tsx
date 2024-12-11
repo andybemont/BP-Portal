@@ -1,9 +1,15 @@
 "use client";
-import { Task, User } from "@/app/lib/definitions";
+import { Task, User } from "@/app/lib/data-model/definitions";
 import { CheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { markTaskComplete, markTaskNotComplete } from "@/app/lib/data";
-import { toNiceDateString, userNameById } from "@/app/lib/client-helpers";
+import {
+  markTaskComplete,
+  markTaskNotComplete,
+} from "@/app/lib/data-model/task-actions";
+import {
+  toNiceDateString,
+  userNameById,
+} from "@/app/lib/helpers/client-side-helpers";
 import TaskAssignModal from "./task-assign-modal";
 
 export default function TaskEntry({

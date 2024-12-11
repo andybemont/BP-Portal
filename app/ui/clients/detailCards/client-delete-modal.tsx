@@ -1,7 +1,7 @@
 "use client";
 
-import { Client } from "@/app/lib/definitions";
-import { deleteClient } from "@/app/lib/client-actions";
+import { Client } from "@/app/lib/data-model/definitions";
+import { deleteClient } from "@/app/lib/data-model/client-actions";
 import DeleteModal from "../../shared/delete-modal";
 
 export default function ClientDeleteModal({

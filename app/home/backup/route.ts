@@ -1,4 +1,4 @@
-import { fetchBackup } from "@/app/lib/data";
+import { fetchBackup } from "@/app/lib/data-model/data";
 export const dynamic = "force-dynamic";
 
 export async function GET() {

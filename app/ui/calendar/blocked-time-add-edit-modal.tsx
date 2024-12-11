@@ -1,12 +1,12 @@
 "use client";
 
-import { CalendarEntry } from "@/app/lib/definitions";
+import { CalendarEntry } from "@/app/lib/data-model/definitions";
 import { useActionState, useEffect } from "react";
 import {
   BlockedTimeFormState,
   insertBlockedTime,
   updateBlockedTime,
-} from "@/app/lib/blocked-time-actions";
+} from "@/app/lib/data-model/blocked-time-actions";
 import TextField from "../shared/controls/text-field";
 import FormModal from "../shared/form-modal";
 import CheckboxField from "../shared/controls/checkbox-field";

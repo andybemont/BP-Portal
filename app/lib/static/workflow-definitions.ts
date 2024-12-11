@@ -1,5 +1,5 @@
-import { userIds } from "./backup";
-import { Event } from "./definitions";
+import { userIds } from "../backup-restore/backup";
+import { Event } from "../data-model/definitions";
 
 export type StandardTask = {
   token: string;

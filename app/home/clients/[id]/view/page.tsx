@@ -1,4 +1,7 @@
-import { fetchAllUsers, fetchClientDetailsById } from "@/app/lib/data";
+import {
+  fetchAllUsers,
+  fetchClientDetailsById,
+} from "@/app/lib/data-model/data";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import ClientDetailForm from "@/app/ui/clients/details";

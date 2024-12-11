@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarEntry, User } from "@/app/lib/definitions";
+import { CalendarEntry, User } from "@/app/lib/data-model/definitions";
 import TaskEntry from "./task-entry";
 import EventEntry from "./event-entry";
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";

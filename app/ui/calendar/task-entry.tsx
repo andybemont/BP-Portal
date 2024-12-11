@@ -1,11 +1,14 @@
 "use client";
-import { CalendarEntry, User } from "@/app/lib/definitions";
+import { CalendarEntry, User } from "@/app/lib/data-model/definitions";
 import Link from "next/link";
 import { CheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { markTaskComplete, markTaskNotComplete } from "@/app/lib/data";
+import {
+  markTaskComplete,
+  markTaskNotComplete,
+} from "@/app/lib/data-model/task-actions";
 import TaskAssignModal from "../clients/detailCards/task-assign-modal";
-import { userNameById } from "@/app/lib/client-helpers";
+import { userNameById } from "@/app/lib/helpers/client-side-helpers";
 
 export default function TaskEntry({
   e,

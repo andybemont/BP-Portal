@@ -2,7 +2,7 @@
 
 import { lusitana } from "@/app/ui/fonts";
 import Search from "@/app/ui/search";
-import { Client, User } from "@/app/lib/definitions";
+import { Client, User } from "@/app/lib/data-model/definitions";
 import Link from "next/link";
 import { useState } from "react";
 import ClientAddEditModal from "./detailCards/client-add-edit-modal";

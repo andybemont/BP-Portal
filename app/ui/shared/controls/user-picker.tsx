@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/app/lib/definitions";
+import { User } from "@/app/lib/data-model/definitions";
 import LabelBox from "./label-box";
 import ValidationErrorBox from "./validation-error-box";
 

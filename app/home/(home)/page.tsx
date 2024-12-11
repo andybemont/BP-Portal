@@ -1,4 +1,4 @@
-import { fetchAllUsers, fetchCalendar } from "@/app/lib/data";
+import { fetchAllUsers, fetchCalendar } from "@/app/lib/data-model/data";
 import EventTable from "@/app/ui/calendar/table";
 export const dynamic = "force-dynamic";
 

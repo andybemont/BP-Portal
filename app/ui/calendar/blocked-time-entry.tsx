@@ -1,7 +1,10 @@
 "use client";
-import { CalendarEntry } from "@/app/lib/definitions";
+import { CalendarEntry } from "@/app/lib/data-model/definitions";
 import { useState } from "react";
-import { toNiceDateString, userNamesByIds } from "@/app/lib/client-helpers";
+import {
+  toNiceDateString,
+  userNamesByIds,
+} from "@/app/lib/helpers/client-side-helpers";
 import BlockedTimeAddEditModal from "./blocked-time-add-edit-modal";
 import { useRouter } from "next/navigation";
 

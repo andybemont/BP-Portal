@@ -1,6 +1,6 @@
 "use client";
 
-import { Event, EventDetails, User } from "@/app/lib/definitions";
+import { Event, EventDetails, User } from "@/app/lib/data-model/definitions";
 import {
   PencilIcon,
   TrashIcon,
@@ -10,7 +10,7 @@ import { useState } from "react";
 import EventAddEditModal from "./event-add-edit-modal";
 import EventDeleteModal from "./event-delete-modal";
 import TaskEntry from "./task-entry";
-import { toNiceDateString } from "@/app/lib/client-helpers";
+import { toNiceDateString } from "@/app/lib/helpers/client-side-helpers";
 
 const colors = {
   complete: "text-black/70 bg-black/30",

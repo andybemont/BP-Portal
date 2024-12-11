@@ -1,7 +1,7 @@
 "use client";
 
-import { EmailTemplate, User } from "@/app/lib/definitions";
-import { deleteTemplate } from "@/app/lib/template-actions";
+import { EmailTemplate, User } from "@/app/lib/data-model/definitions";
+import { deleteTemplate } from "@/app/lib/data-model/template-actions";
 import DeleteModal from "../shared/delete-modal";
 
 export default function TemplateDeleteModal({

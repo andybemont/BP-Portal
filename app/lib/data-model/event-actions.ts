@@ -4,9 +4,10 @@ import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 import { Event } from "./definitions";
-import { insertEventRecord, updateEventRecord } from "./data";
-import { nullIfEmpty, uuidv4 } from "./helpers";
+import { nullIfEmpty, uuidv4 } from "../helpers/server-side-helpers";
 import { ensureTasksForEvent } from "./workflow-actions";
+import { db } from "@vercel/postgres";
+const client = await db.connect();
 
 const EventFormSchema = z.object({
   id: z.string(),
@@ -183,4 +184,95 @@ export async function deleteEvent(event: Event) {
     return { message: "Database Error: Failed to delete event." };
   }
   redirect(`/home/clients/${event.client_id}/view`);
+}
+
+export async function updateEventRecord(event: any) {
+  try {
+    const sql = `
+    UPDATE events SET
+      client_id = ${event.client_id ? `'${event.client_id}'` : "null"},
+      user_id = ${event.user_id ? `'${event.user_id}'` : "null"},
+      seconduser_id = ${
+        event.seconduser_id ? `'${event.seconduser_id}'` : "null"
+      },
+      thirduser_id = ${event.thirduser_id ? `'${event.thirduser_id}'` : "null"},
+      date = ${event.date ? `'${event.date.toISOString()}'` : "null"},
+      title = ${event.title ? `'${event.title}'` : "null"},
+      notes = ${event.notes ? `'${event.notes}'` : "null"},
+      cost = ${event.cost ? `'${event.cost}'` : "null"},
+      duration = ${event.duration ? `'${event.duration}'` : "null"},
+      engagementsession = ${
+        event.engagementsession ? `'${event.engagementsession}'` : "null"
+      },
+      priorityediting = ${
+        event.priorityediting ? `'${event.priorityediting}'` : "null"
+      },
+      numphotographers = ${
+        event.numphotographers ? `'${event.numphotographers}'` : "null"
+      },
+      location = ${event.location ? `'${event.location}'` : "null"},
+      location2 = ${event.location2 ? `'${event.location2}'` : "null"},
+      location3 = ${event.location3 ? `'${event.location3}'` : "null"},
+      location4 = ${event.location4 ? `'${event.location4}'` : "null"},
+      pixieseturl = ${event.pixieseturl ? `'${event.pixieseturl}'` : "null"}
+    WHERE id = '${event.id}'
+  `;
+    await client.query(sql);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update event.");
+  }
+}
+
+export async function insertEventRecord(event: any) {
+  try {
+    const sql = `
+     INSERT INTO events (
+      id,
+    ${event.client_id ? `client_id,` : ""}
+    ${event.user_id ? `user_id,` : ""}
+    ${event.seconduser_id ? `seconduser_id,` : ""}
+    ${event.thirduser_id ? `thirduser_id,` : ""}
+    ${event.date ? `date,` : ""}
+    ${event.title ? `title,` : ""}
+    ${event.notes ? `notes,` : ""}
+    ${event.cost ? `cost,` : ""}
+    ${event.duration ? `duration,` : ""}
+    ${event.engagementsession ? `engagementsession,` : ""}
+    ${event.priorityediting ? `priorityediting,` : ""}
+    ${event.numphotographers ? `numphotographers,` : ""}
+    ${event.location ? `location,` : ""}
+    ${event.location2 ? `location2,` : ""}
+    ${event.location3 ? `location3,` : ""}
+    ${event.location4 ? `location4,` : ""}
+    ${event.pixieseturl ? `pixieseturl,` : ""}
+      type
+     ) VALUES (
+      '${event.id}',
+      ${event.client_id ? `'${event.client_id}',` : ""}
+      ${event.user_id ? `'${event.user_id}',` : ""}
+      ${event.seconduser_id ? `'${event.seconduser_id}',` : ""}
+      ${event.thirduser_id ? `'${event.thirduser_id}',` : ""}
+      ${event.date ? `'${new Date(event.date).toISOString()}',` : ""}
+      ${event.title ? `'${event.title}',` : ""}
+      ${event.notes ? `'${event.notes}',` : ""}
+      ${event.cost ? `'${event.cost}',` : ""}
+      ${event.duration ? `'${event.duration}',` : ""}
+      ${event.engagementsession ? `'${event.engagementsession}',` : ""}
+      ${event.priorityediting ? `'${event.priorityediting}',` : ""}
+      ${event.numphotographers ? `'${event.numphotographers}',` : ""}
+      ${event.location ? `'${event.location}',` : ""}
+      ${event.location2 ? `'${event.location2}',` : ""}
+      ${event.location3 ? `'${event.location3}',` : ""}
+      ${event.location4 ? `'${event.location4}',` : ""}
+      ${event.pixieseturl ? `'${event.pixieseturl}',` : ""}
+      '${event.type}'
+     )
+      RETURNING ID
+   `;
+    await client.query(sql);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update event.");
+  }
 }

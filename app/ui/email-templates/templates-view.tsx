@@ -1,6 +1,6 @@
 "use client";
 
-import { EmailTemplate, User } from "@/app/lib/definitions";
+import { EmailTemplate, User } from "@/app/lib/data-model/definitions";
 import { useState } from "react";
 import LabelBox from "../shared/controls/label-box";
 import {

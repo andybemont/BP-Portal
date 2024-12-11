@@ -1,10 +1,10 @@
 "use client";
 
-import { Task, User } from "@/app/lib/definitions";
+import { Task, User } from "@/app/lib/data-model/definitions";
 import { useActionState, useEffect } from "react";
 import UserPicker from "../../shared/controls/user-picker";
 import FormModal from "../../shared/form-modal";
-import { assignTask } from "@/app/lib/data";
+import { assignTask } from "@/app/lib/data-model/task-actions";
 
 export default function TaskAssignModal({
   task,
@@ -17,11 +17,6 @@ export default function TaskAssignModal({
   show: boolean;
   handleClose: (userId?: string) => void;
 }) {
-  const afterUpdate = (new_user_id?: string) => {
-    task.user_id = new_user_id;
-    handleClose(task.user_id);
-  };
-
   var [state, formAction] = useActionState(assignTask.bind(null, task), {
     updated: false,
     new_user_id: undefined,

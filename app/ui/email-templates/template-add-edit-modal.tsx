@@ -1,12 +1,12 @@
 "use client";
 
-import { EmailTemplate, User } from "@/app/lib/definitions";
+import { EmailTemplate, User } from "@/app/lib/data-model/definitions";
 import { useActionState } from "react";
 import {
   createTemplate,
   TemplateFormState,
   updateTemplate,
-} from "@/app/lib/template-actions";
+} from "@/app/lib/data-model/template-actions";
 import UserPicker from "../shared/controls/user-picker";
 import TextField from "../shared/controls/text-field";
 import NotesField from "../shared/controls/notes-field";

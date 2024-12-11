@@ -1,4 +1,7 @@
-import { fetchAllEmailTemplates, fetchAllUsers } from "@/app/lib/data";
+import {
+  fetchAllEmailTemplates,
+  fetchAllUsers,
+} from "@/app/lib/data-model/data";
 import TemplatesView from "@/app/ui/email-templates/templates-view";
 export const dynamic = "force-dynamic";
 

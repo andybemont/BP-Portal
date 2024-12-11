@@ -1,12 +1,12 @@
 "use client";
 
-import { Client, User } from "@/app/lib/definitions";
+import { Client, User } from "@/app/lib/data-model/definitions";
 import { useActionState } from "react";
 import {
   ClientFormState,
   createClient,
   updateClient,
-} from "@/app/lib/client-actions";
+} from "@/app/lib/data-model/client-actions";
 import UserPicker from "../../shared/controls/user-picker";
 import TextField from "../../shared/controls/text-field";
 import NotesField from "../../shared/controls/notes-field";

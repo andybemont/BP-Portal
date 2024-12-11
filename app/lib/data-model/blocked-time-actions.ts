@@ -4,7 +4,7 @@ import { BlockedTime } from "./definitions";
 import { db } from "@vercel/postgres";
 const client = await db.connect();
 import { z } from "zod";
-import { uuidv4 } from "./helpers";
+import { uuidv4 } from "../helpers/server-side-helpers";
 import { redirect } from "next/navigation";
 
 const BlockedTimeFormSchema = z.object({

@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientDetails, User } from "@/app/lib/definitions";
+import { ClientDetails, User } from "@/app/lib/data-model/definitions";
 import { useState } from "react";
 import EventCard from "./detailCards/event-card";
 import EventAddEditModal from "./detailCards/event-add-edit-modal";
@@ -10,7 +10,9 @@ import {
   PencilIcon,
   PlusCircleIcon,
   TrashIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
+import PaymentsModel from "./detailCards/payments-modal";
 
 export default function ClientDetailForm({
   client,
@@ -23,11 +25,17 @@ export default function ClientDetailForm({
   const [showAddEventForm, setShowAddEventForm] = useState(false);
   const [showEditClientForm, setShowEditClientForm] = useState(false);
   const [showDeleteClientForm, setShowDeleteClientForm] = useState(false);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
   var count = 0;
   return (
     <div key={++count} className="m-1">
       <div key={client.id + "_details"}>
+        <PaymentsModel
+          show={showPaymentPopup}
+          client={client}
+          handleClose={() => setShowPaymentPopup(false)}
+        ></PaymentsModel>
         <EventAddEditModal
           handleClose={() => setShowAddEventForm(false)}
           show={showAddEventForm}
@@ -62,6 +70,12 @@ export default function ClientDetailForm({
               className="text-black h-6 pl-3 pt-1 cursor-pointer"
               onClick={() => {
                 setShowAddEventForm(true);
+              }}
+            />
+            <CurrencyDollarIcon
+              className="text-black h-6 pl-3 pt-1 cursor-pointer"
+              onClick={() => {
+                setShowPaymentPopup(true);
               }}
             />
             <TrashIcon

@@ -1,12 +1,12 @@
 "use client";
 
-import { Event, User } from "@/app/lib/definitions";
+import { Event, User } from "@/app/lib/data-model/definitions";
 import { useActionState, useState } from "react";
 import {
   createEvent,
   EventFormState,
   updateEvent,
-} from "@/app/lib/event-actions";
+} from "@/app/lib/data-model/event-actions";
 import UserPicker from "../../shared/controls/user-picker";
 import TextField from "../../shared/controls/text-field";
 import NotesField from "../../shared/controls/notes-field";

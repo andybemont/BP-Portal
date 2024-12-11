@@ -36,6 +36,14 @@ export type BlockedTime = {
   text: string;
 };
 
+export type Payment = {
+  id: string;
+  client_id: string;
+  date: Date;
+  amount: number;
+  source: string;
+};
+
 export type CalendarEntry = {
   client_id: string;
   client_name: string;
@@ -76,6 +84,7 @@ export type Event = {
 
 export type ClientDetails = Client & {
   events: EventDetails[];
+  payments: Payment[];
 };
 
 export type EventDetails = Event & {
