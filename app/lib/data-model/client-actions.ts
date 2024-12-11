@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
+import { IdResult } from "../helpers/server-side-helpers";
 import { Client } from "./definitions";
-import { IdResult } from "./helpers";
 
 const ClientFormSchema = z.object({
   id: z.string(),
