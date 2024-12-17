@@ -3,10 +3,17 @@
 import { useState } from "react";
 import ExpectedIncomeReport from "./specific-components/expected-income-report";
 import RemainingEngagementShootsReport from "./specific-components/remaining-engagement-shoots-report";
+import MissingGalleriesReport from "./specific-components/missing-galleries-report";
 
 const expectedIncome = "Remaining Payments";
 const remainingEngagementShoots = "Remaining Engagement Shoots";
-const allReports = [expectedIncome, remainingEngagementShoots];
+const missingGalleries = "Missing Galleries";
+const allReports = [
+  expectedIncome,
+  remainingEngagementShoots,
+  missingGalleries,
+];
+allReports.sort();
 
 export default function ReportsView() {
   const [selectedReport, setSelectedReport] = useState<string>();
@@ -35,6 +42,7 @@ export default function ReportsView() {
         {selectedReport === remainingEngagementShoots && (
           <RemainingEngagementShootsReport />
         )}
+        {selectedReport === missingGalleries && <MissingGalleriesReport />}
       </div>
     </div>
   );
